@@ -1,0 +1,3 @@
+[submodule "submodules/wbuart32"]
+	path = submodules/wbuart32
+	url = git@github.com:ZipCPU/wbuart32.git
