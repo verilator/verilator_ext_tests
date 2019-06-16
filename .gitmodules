@@ -1,3 +1,6 @@
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
 	url = git@github.com:ZipCPU/wbuart32.git
+[submodule "submodules/swerv_eh1"]
+	path = submodules/swerv_eh1
+	url = git@github.com:westerndigitalcorporation/swerv_eh1.git
