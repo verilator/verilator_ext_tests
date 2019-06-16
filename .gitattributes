@@ -1,0 +1,3 @@
+*.v linguist-language=SystemVerilog
+*.vh linguist-language=SystemVerilog
+*.sv linguist-language=SystemVerilog
