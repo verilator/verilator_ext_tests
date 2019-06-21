@@ -10,7 +10,7 @@ use File::Spec;
 
 scenarios(vlt => 1);
 
-$ENV{RV_ROOT} = File::Spec->rel2abs($Self->{t_dir}."/../submodules/swerv_eh1");
+$ENV{RV_ROOT} = File::Spec->rel2abs($Self->{t_dir}."/../submodules/Cores-SweRV");
 $ENV{VERILATOR} = "$ENV{VERILATOR_ROOT}/bin/verilator";
 
 if (!-r "$ENV{RV_ROOT}/configs/snapshots/default/defines.h") {
@@ -19,12 +19,12 @@ if (!-r "$ENV{RV_ROOT}/configs/snapshots/default/defines.h") {
 	);
 }
 
-run(cmd => ["make -C submodules/swerv_eh1 -j 4 -f $ENV{RV_ROOT}/tools/Makefile"
+run(cmd => ["make -C submodules/Cores-SweRV -j 4 -f $ENV{RV_ROOT}/tools/Makefile"
 	    ,"verilator VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
     logfile => "$Self->{obj_dir}/compile.log",
     );
     
-run(cmd => ["make -C submodules/swerv_eh1 -f $ENV{RV_ROOT}/tools/Makefile"
+run(cmd => ["make -C submodules/Cores-SweRV -f $ENV{RV_ROOT}/tools/Makefile"
 	    ,"verilator-run VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
     logfile => "$Self->{obj_dir}/sim.log",
     );
