@@ -28,8 +28,14 @@
 default:
 	@echo See docs/README.md for information on using these tests.
 
+######################################################################
+
+SCENARIOS ?= --vlt --vltmt --dist
+
 test:
-	t/bootstrap.pl t/t_*.pl
+	t/bootstrap.pl $(DRIVER_FLAGS) $(SCENARIOS) t/t_*.pl
+
+######################################################################
 
 clean mostlyclean distclean maintainer-clean::
 	rm -f */obj_*
