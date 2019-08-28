@@ -38,6 +38,7 @@ To be accepted in this package, an external submodule tested here must:
 * Be self checking (potentially checked by the t/ script you write).
 * Be Verilator lint clean (using lint_off pragmas in code is fine).
 * Be willing to consider patches as needed (i.e. not a "dead project").
+* Already run CI against a fixed version of Verilator
 
 # License
 

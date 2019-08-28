@@ -38,8 +38,8 @@ test:
 ######################################################################
 
 clean mostlyclean distclean maintainer-clean::
-	rm -f */obj_*
-	rm -f obj_*
+	rm -rf */obj_*
+	rm -rf obj_*
 	for p in submodules/* ; do \
 	   test -e $$p/Makefile && $(MAKE) -C $$p clean ; \
 	done

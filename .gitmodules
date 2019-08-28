@@ -1,6 +1,9 @@
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
-	url = git@github.com:ZipCPU/wbuart32.git
+	url = https://github.com/ZipCPU/wbuart32.git
 [submodule "submodules/Cores-SweRV"]
 	path = submodules/Cores-SweRV
-	url = git@github.com:chipsalliance/Cores-SweRV.git
+	url = https://github.com/chipsalliance/Cores-SweRV.git
+[submodule "submodules/verilator"]
+	path = submodules/verilator
+	url = https://github.com/verilator/verilator.git
