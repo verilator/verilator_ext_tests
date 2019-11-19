@@ -7,3 +7,6 @@
 [submodule "submodules/verilator"]
 	path = submodules/verilator
 	url = https://github.com/verilator/verilator.git
+[submodule "submodules/gtkwave"]
+	path = submodules/gtkwave
+	url = https://github.com/gtkwave/gtkwave.git
