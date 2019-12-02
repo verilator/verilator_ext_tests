@@ -51,4 +51,5 @@ notifications:
   email:
     if: repo = verilator/verilator_ext_tests
     recipients:
+      - wsnyder@wsnyder.org
       - todd.strader@gmail.com
