@@ -17,12 +17,13 @@ sub check {
     if ($? || $o) {
         print $out;
         $Self->error("Differences in $basename");
+        $Self->copy_if_golden("$a/$basename", "$b/$basename");
     }
 }
 
 print `pwd`;
 my $g = "submodules/gtkwave/gtkwave3-gtk3";
-my $v = "submodules/verilator";
+my $v = $ENV{VERILATOR_ROOT} || "submodules/verilator";
 
 check("$g/src", "$v/include/gtkwave", "wavealloca.h");
 check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.h");
