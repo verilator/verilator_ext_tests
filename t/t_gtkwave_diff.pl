@@ -7,6 +7,8 @@ if (!$::Driver) { use FindBin; exec("$FindBin::Bin/bootstrap.pl", @ARGV, $0); di
 # Lesser General Public License Version 3 or the Perl Artistic License
 # Version 2.0.
 
+$ENV{VERILATOR_TEST_UPSTREAM} or skip("Skipping due to no VERILATOR_TEST_UPSTREAM");
+
 scenarios(dist => 1);
 
 sub check {
