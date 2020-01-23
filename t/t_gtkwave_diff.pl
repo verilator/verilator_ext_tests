@@ -7,10 +7,6 @@ if (!$::Driver) { use FindBin; exec("$FindBin::Bin/bootstrap.pl", @ARGV, $0); di
 # Lesser General Public License Version 3 or the Perl Artistic License
 # Version 2.0.
 
-$ENV{VERILATOR_TEST_UPSTREAM} or skip("Skipping due to no VERILATOR_TEST_UPSTREAM");
-
-scenarios(dist => 1);
-
 sub check {
     my ($a, $b, $basename) = @_;
     my $cmd = "diff -u $a/$basename $b/$basename 2>&1";
@@ -23,17 +19,24 @@ sub check {
     }
 }
 
-print `pwd`;
-my $g = "submodules/gtkwave/gtkwave3-gtk3";
-my $v = $ENV{VERILATOR_ROOT} || "submodules/verilator";
+scenarios(dist => 1);
 
-check("$g/src", "$v/include/gtkwave", "wavealloca.h");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.h");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.c");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.h");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.c");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.h");
-check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.c");
+if (!$ENV{VERILATOR_TEST_UPSTREAM}) {
+    skip("Skipping due to no VERILATOR_TEST_UPSTREAM");
+} else {
+    print `pwd`;
+    my $g = "submodules/gtkwave/gtkwave3-gtk3";
+    my $v = $ENV{VERILATOR_ROOT} || "submodules/verilator";
 
-ok(1);
+    check("$g/src", "$v/include/gtkwave", "wavealloca.h");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.h");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.c");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.h");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.c");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.h");
+    check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.c");
+
+    ok(1);
+}
+
 1;
