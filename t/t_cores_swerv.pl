@@ -21,15 +21,10 @@ if (!-r "$ENV{RV_ROOT}/configs/snapshots/default/defines.h") {
 
 run(cmd => ["make -C submodules/Cores-SweRV -j 4 -f $ENV{RV_ROOT}/tools/Makefile"
 	    ,"verilator VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
-    logfile => "$Self->{obj_dir}/compile.log",
-    );
-    
-run(cmd => ["make -C submodules/Cores-SweRV -f $ENV{RV_ROOT}/tools/Makefile"
-	    ,"verilator-run VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
     logfile => "$Self->{obj_dir}/sim.log",
     );
     
-file_grep("$Self->{obj_dir}/sim.log", qr/.*\nHello World.*\nFinished.*\nEnd of sim\n/is);
+file_grep("$Self->{obj_dir}/sim.log", qr/.*\nHello World.*\nFinished.*\nTEST_PASSED\n/is);
 
 ok(1);
 1;
