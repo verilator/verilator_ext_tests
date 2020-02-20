@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/verilator/verilator_ext_tests.svg?branch=master)](https://travis-ci.com/verilator/verilator_ext_tests)
+
 # Purpose
 
 This project contains additional tests for Verilator. These are generally
