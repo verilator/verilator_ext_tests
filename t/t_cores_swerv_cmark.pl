@@ -19,12 +19,15 @@ if (!-r "$ENV{RV_ROOT}/configs/snapshots/default/defines.h") {
 	);
 }
 
+run(cmd => ["cp $ENV{RV_ROOT}/testbench/hex/cmark.data.hex $ENV{RV_ROOT}/data.hex"]);
+run(cmd => ["cp $ENV{RV_ROOT}/testbench/hex/cmark.program.hex $ENV{RV_ROOT}/program.hex"]);
+
 run(cmd => ["make -C submodules/Cores-SweRV -j 4 -f $ENV{RV_ROOT}/tools/Makefile"
 	    ,"verilator VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
     logfile => "$Self->{obj_dir}/sim.log",
     );
     
-file_grep("$Self->{obj_dir}/sim.log", qr/.*\nHello World.*\nFinished.*\nTEST_PASSED\n/is);
+file_grep("$Self->{obj_dir}/sim.log", qr/.*\nTEST_PASSED\n/is);
 
 ok(1);
 1;
