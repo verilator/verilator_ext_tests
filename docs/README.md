@@ -9,28 +9,36 @@ To file issues, etc, please see https://verilator.org.
 
 # Usage
 
-* Initial prep
+Initial prep
 
-    git submodule update
+```
+git submodule update
+```
 
-* Run an individual test:
+Run an individual test:
 
-    export VERILATOR_ROOT=location   # if your shell is bash
-    setenv VERILATOR_ROOT location   # if your shell is csh
-    t/t_a_hello.pl
+```
+export VERILATOR_ROOT=location  # if your shell is bash
+setenv VERILATOR_ROOT location  # if your shell is csh
+t/t_a_hello.pl
+```
 
-* Automatically run these tests as part of normal Verilator "make test"
+Automatically run these tests as part of normal Verilator "make test"
 
-    export VERILATOR_ROOT=$VERILATOR_TESTS_SITE:`pwd`   # if your shell is bash
-    setenv VERILATOR_ROOT $VERILATOR_TESTS_SITE:`pwd`   # if your shell is csh
+```
+export VERILATOR_TESTS_SITE=$VERILATOR_TESTS_SITE:$PWD  # if your shell is bash
+setenv VERILATOR_TESTS_SITE $VERILATOR_TESTS_SITE:$PWD  # if your shell is csh
+```
 
-* Cleanup
+Cleanup
 
-    make clean
+```
+make clean
+```
 
 # Adding additional tests
 
-To add additional tests, add a t/t_{name}.pl file.  See the Verilator
+To add additional tests, add a `t/t_{name}.pl` file.  See the Verilator
 internals documentation for instructions on the test file format.
 
 To be accepted in this package, an external submodule tested here must:
