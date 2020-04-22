@@ -13,20 +13,18 @@ scenarios(vlt => 1);
 $ENV{RV_ROOT} = File::Spec->rel2abs($Self->{t_dir}."/../submodules/Cores-SweRV");
 $ENV{VERILATOR} = "$ENV{VERILATOR_ROOT}/bin/verilator";
 
-if (!-r "$ENV{RV_ROOT}/configs/snapshots/default/defines.h") {
-    run(cmd => ["cd $ENV{RV_ROOT} && $ENV{RV_ROOT}/configs/swerv.config -snapshot=mybuild"],
-	logfile => "$Self->{obj_dir}/config.log",
-	);
-}
-
-run(cmd => ["cp $ENV{RV_ROOT}/testbench/hex/cmark.data.hex $ENV{RV_ROOT}/data.hex"]);
-run(cmd => ["cp $ENV{RV_ROOT}/testbench/hex/cmark.program.hex $ENV{RV_ROOT}/program.hex"]);
-
-run(cmd => ["make -C submodules/Cores-SweRV -j 4 -f $ENV{RV_ROOT}/tools/Makefile"
-	    ,"verilator VERILATOR=$ENV{VERILATOR} snapshot=mybuild"],
+# This will run the canned CoreMark (even if you have a riscv64-unknown-elf
+# toolchain on your path), from ICCM but otherwise using the default core
+# configuration. Running from ICCM is faster and hopefully more exciting.
+# Note the build happens in $Self->{obj_dir} as the SweRV build system can
+# find everything via RV_ROOT. This leaves the submodule clean.
+run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
+            "VERILATOR=$ENV{VERILATOR} CONF_PARAMS=-iccm_enable=1",
+            "GCC_PREFIX=none TEST=cmark_iccm",
+            "VERILATOR_MAKE_FLAGS=VM_PARALLEL_BUILDS=1 verilator"],
     logfile => "$Self->{obj_dir}/sim.log",
     );
-    
+
 file_grep("$Self->{obj_dir}/sim.log", qr/.*\nTEST_PASSED\n/is);
 
 ok(1);
