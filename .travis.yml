@@ -38,10 +38,12 @@ jobs:
 # build_verilator.sh will only build for this stage, all other stages
 #   must have a cached copy of the tool
     - stage: build
-      name: Build Verilator
+      name: "Build Verilator"
+      dist: focal
       script: echo "Done building Verilator"
     - stage: test
-      name: Run Tests
+      name: "Run Tests"
+      dist: focal
       script: make test
 
 after_script:
