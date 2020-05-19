@@ -23,6 +23,7 @@ cache:
 
 before_install:
   - ci/update_submodules.sh
+  - sudo apt-get install libfl-dev
 
 before_script:
   - export NUM_JOBS=$((`nproc` + 1))
