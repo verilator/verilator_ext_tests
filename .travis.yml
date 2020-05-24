@@ -24,6 +24,7 @@ cache:
 before_install:
   - ci/update_submodules.sh
   - sudo apt-get install libfl-dev
+  - yes yes | sudo cpan -fi Unix::Processors Parallel::Forker
 
 before_script:
   - $VERILATOR_ROOT/ci/build_verilator.sh
