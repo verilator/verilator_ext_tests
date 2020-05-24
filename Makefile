@@ -30,6 +30,7 @@ default:
 
 ######################################################################
 
+DRIVER_FLAGS ?= -j 0 --quiet --rerun
 SCENARIOS ?= --vlt --vltmt --dist
 
 test:
