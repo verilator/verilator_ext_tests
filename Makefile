@@ -37,6 +37,10 @@ test:
 
 ######################################################################
 
+git-clean:
+	git clean -xfd
+	git submodule foreach git clean -xfd
+
 clean mostlyclean distclean maintainer-clean::
 	rm -rf */obj_*
 	rm -rf obj_*
