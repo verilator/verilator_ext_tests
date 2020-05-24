@@ -10,8 +10,8 @@ use File::Spec;
 
 scenarios(vlt => 1);
 
-$ENV{RV_ROOT} = File::Spec->rel2abs($Self->{t_dir}."/../submodules/Cores-SweRV-EL2");
-$ENV{VERILATOR} = "$ENV{VERILATOR_ROOT}/bin/verilator";
+setenv('RV_ROOT', File::Spec->rel2abs($Self->{t_dir}."/../submodules/Cores-SweRV-EL2"));
+setenv('VERILATOR', "$ENV{VERILATOR_ROOT}/bin/verilator");
 
 # This will run the canned CoreMark (even if you have a riscv64-unknown-elf
 # toolchain on your path), from ICCM but otherwise using the default core
