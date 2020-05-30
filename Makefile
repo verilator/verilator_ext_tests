@@ -38,6 +38,12 @@ test:
 
 ######################################################################
 
+git-update:
+	git pull
+	git submodule update --remote --merge
+
+######################################################################
+
 git-clean:
 	git clean -xfd
 	git submodule foreach git clean -xfd
