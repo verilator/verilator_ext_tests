@@ -6,44 +6,57 @@
 
 version: ~> 1.0
 
-os: linux
 language: cpp
-cache: ccache
 
-env:
-  global:
-    - VERILATOR_CACHE=$HOME/verilator_cache
-    - VERILATOR_ROOT=$PWD/submodules/verilator
-    - VERILATOR_NUM_JOBS=$(echo `nproc` + 1 | bc)
-    - OBJCACHE=ccache
+os: linux
+dist: focal
+compiler: gcc
 
 cache:
   directories:
-    - $VERILATOR_CACHE
+    - $HOME/.ccache
 
-before_install:
-  - ci/update_submodules.sh
-  - sudo apt-get install libfl-dev
-  - yes yes | sudo cpan -fi Unix::Processors Parallel::Forker
-
-before_script:
-  - $VERILATOR_ROOT/ci/build_verilator.sh
+env:
+  global:
+    - VERILATOR_ROOT=$TRAVIS_BUILD_DIR/submodules/verilator
 
 stages:
   - build
   - test
 
+before_install:
+  - cd "$TRAVIS_BUILD_DIR" # Skipping the git clone in later stages requires this
+  - | # Update the verilator submodule here to pick up CI scripts
+    if [ "$TRAVIS_BUILD_STAGE_NAME" = "build" ]; then
+      git submodule update --remote --merge $VERILATOR_ROOT
+    fi
+  - export CCACHE_MAXSIZE=$($VERILATOR_ROOT/ci/travis-ccache-size.bash)
+  - env | sort
+  - g++ -E -dM -c -x c++ /dev/null | sort
+
+install:
+  - $VERILATOR_ROOT/ci/travis-install.bash
+
+before_script:
+  - $VERILATOR_ROOT/ci/travis-ccache-maint.bash
+
+before_cache:
+  - ccache -s -z
+
 jobs:
   include:
-# build_verilator.sh will only build for this stage, all other stages
-#   must have a cached copy of the tool
     - stage: build
-      name: "Build Verilator"
-      dist: focal
-      script: echo "Done building Verilator"
+      script: |
+              # Compile verilator
+              pushd $VERILATOR_ROOT
+              autoconf
+              ./configure --enable-ccwarn
+              make -j $(nproc)
+              popd
+      workspaces: {create: {name: build, paths: .}}
     - stage: test
-      name: "Run Tests"
-      dist: focal
+      workspaces: {use: build}
+      git: {clone: false}
       script: make test
 
 after_script:
