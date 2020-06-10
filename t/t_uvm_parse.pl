@@ -9,7 +9,7 @@ if (!$::Driver) { use FindBin; exec("$FindBin::Bin/bootstrap.pl", @ARGV, $0); di
 
 use File::Spec;
 
-scenarios(simulator => 1);
+scenarios(vlt => 1);
 
 my $uvm_root = File::Spec->rel2abs($Self->{t_dir}."/../submodules/uvm");
 
