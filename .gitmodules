@@ -18,4 +18,4 @@
 	url = https://github.com/ZipCPU/wbuart32.git
 [submodule "submodules/uvm"]
 	path = submodules/uvm
-	url = git@github.com:SymbiFlow/uvm.git
+	url = https://github.com/SymbiFlow/uvm.git
