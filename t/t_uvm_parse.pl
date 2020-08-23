@@ -15,8 +15,8 @@ my $uvm_root = File::Spec->rel2abs($Self->{t_dir}."/../submodules/uvm");
 
 lint(
     v_flags2 => ["+incdir+${uvm_root}/src",
-                 "--bbox-unsup -Wno-UNPACKED",
-                 "--debug-exit-parse",
+                 "-Wno-PKGNODECL -Wno-UNPACKED",
+                 "--debug-exit-uvm",
     ],
     );
 
