@@ -1,6 +1,9 @@
 [submodule "submodules/verilator"]
 	path = submodules/verilator
 	url = https://github.com/verilator/verilator.git
+[submodule "submodules/example-systemverilog"]
+	path = submodules/example-systemverilog
+	url = https://github.com/verilator/example-systemverilog.git
 [submodule "submodules/Cores-SweRV"]
 	path = submodules/Cores-SweRV
 	url = https://github.com/chipsalliance/Cores-SweRV.git
@@ -19,6 +22,3 @@
 [submodule "submodules/uvm"]
 	path = submodules/uvm
 	url = https://github.com/SymbiFlow/uvm.git
-[submodule "submodules/example-systemverilog"]
-	path = submodules/example-systemverilog
-	url = git@github.com:verilator/example-systemverilog.git
