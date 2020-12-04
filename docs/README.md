@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/verilator/verilator_ext_tests.svg/workflows/build/badge.svg)](https://github.com/verilator/verilator_ext_tests/actions?query=workflow%3Abuild)
+[![Build Status](https://github.com/verilator/verilator_ext_tests/workflows/build/badge.svg)](https://github.com/verilator/verilator_ext_tests/actions?query=workflow%3Abuild)
 
 # Purpose
 
