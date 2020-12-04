@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/verilator/verilator_ext_tests.svg?branch=master)](https://travis-ci.com/verilator/verilator_ext_tests)
+[![Build Status](https://github.com/verilator/verilator_ext_tests.svg/workflows/build/badge.svg)](https://github.com/verilator/verilator_ext_tests/actions?query=workflow%3Abuild)
 
 # Purpose
 

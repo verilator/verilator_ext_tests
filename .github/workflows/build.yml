@@ -1,0 +1,66 @@
+# DESCRIPTION: Github actions config
+#
+# This file ONLY is placed under the Creative Commons Public Domain, for
+# any use, without warranty, 2020 by Wilson Snyder.
+# SPDX-License-Identifier: CC0-1.0
+
+name: build
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  vlt:
+    runs-on: ubuntu-20.04
+    name: build and test
+    env:
+      CI_OS_NAME: linux
+      CCACHE_COMPRESS: 1
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 4Gi
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Cache
+        uses: actions/cache@v2
+        env:
+          cache-name: ccache
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install packages for build
+        env:
+          CI_BUILD_STAGE_NAME: build
+        run: |
+          cd submodules/verilator && bash ci/ci-install.bash
+          sudo apt-get install ctags
+          sudo cpan -fi Bit::Vector  # For t_cores_el2_cmark
+
+      - name: CCACHE maintenance
+        run: mkdir -p $CCACHE_DIR && cd submodules/verilator && bash ci/ci-ccache-maint.bash
+
+      - name: Build
+        env:
+          CI_BUILD_STAGE_NAME: build
+        run: cd submodules/verilator && bash ci/ci-script.bash
+
+      - name: Install packages for tests
+        env:
+          CI_BUILD_STAGE_NAME: test
+        run: cd submodules/verilator && bash ci/ci-install.bash
+
+      - name: Test
+        run: |
+          export VERILATOR_ROOT=$GITHUB_WORKSPACE/submodules/verilator
+          make test
