@@ -18,6 +18,9 @@ jobs:
     name: build and test
     env:
       CI_OS_NAME: linux
+      CI_RUNS_ON: ubuntu-20.04
+      CI_COMMIT: ${{ github.sha }}
+      CI_M32: 0
       CCACHE_COMPRESS: 1
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 4Gi
