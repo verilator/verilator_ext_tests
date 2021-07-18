@@ -9,7 +9,7 @@ if (!$::Driver) { use FindBin; exec("$FindBin::Bin/bootstrap.pl", @ARGV, $0); di
 scenarios(vlt => 1);
 
 run(cmd => ["make -C submodules/wbuart32",
-            "VERILATOR='$ENV{VERILATOR_ROOT}/bin/verilator --debug-check".join(' ',$Self->driver_verilator_flags())."'",
+            "VERILATOR='$ENV{VERILATOR_ROOT}/bin/verilator --debug-check ".join(' ',$Self->driver_verilator_flags())."'",
             "test"],
     logfile => "$Self->{obj_dir}/sim.log",
     );
