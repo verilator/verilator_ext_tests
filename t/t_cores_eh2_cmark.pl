@@ -19,7 +19,9 @@ setenv('VERILATOR', "$ENV{VERILATOR_ROOT}/bin/verilator");
 # Note the build happens in $Self->{obj_dir} as the SweRV build system can
 # find everything via RV_ROOT. This leaves the submodule clean.
 run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
-            "VERILATOR='$ENV{VERILATOR} --debug-check ".join(' ',$Self->driver_verilator_flags()),"'",
+            # When Verilator v5.000 is master, the '--future0 timing' may be removed
+            "VERILATOR='$ENV{VERILATOR} --debug-check --future0 timing --timing "
+            . join(' ',$Self->driver_verilator_flags()),"'",
             "CONF_PARAMS=-iccm_enable=1",
             "GCC_PREFIX=none TEST=cmark_iccm",
             "VERILATOR_MAKE_FLAGS=VM_PARALLEL_BUILDS=1 verilator"],
