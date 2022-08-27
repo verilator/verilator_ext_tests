@@ -12,6 +12,7 @@ To file issues, etc, please see https://verilator.org.
 Initial prep
 
 ```
+git submodule init  # first time only
 git submodule update
 ```
 
