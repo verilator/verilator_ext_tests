@@ -47,7 +47,6 @@ jobs:
           CI_BUILD_STAGE_NAME: build
         run: |
           cd submodules/verilator && bash ci/ci-install.bash
-          sudo apt-get install ctags
           sudo cpan -fi Bit::Vector  # For t_cores_el2_cmark
 
       - name: CCACHE maintenance
