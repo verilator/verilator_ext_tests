@@ -28,5 +28,10 @@ run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
 
 file_grep("$Self->{obj_dir}/sim.log", qr/.*\nTEST_PASSED\n/is);
 
+# Profiling:
+#  add to cmd: --debug-check --prof-cfuncs -CFLAGS -pg -LDFLAGS -pg
+#  cd /svaha/wsnyder/SandBox/homecvs/v4/verilator_ext_tests/obj_vlt/t_cores_swerv_cmark
+#  gprof 
+
 ok(1);
 1;

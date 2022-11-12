@@ -16,5 +16,8 @@ run(cmd => ["make -C submodules/wbuart32",
 
 file_grep("$Self->{obj_dir}/sim.log", qr/.*\nPASS!\n.*\nPASS\n.*\nPASS!\n/is);
 
+# profiling:
+#   (cd submodules/wbuart32/bench/cpp ; gprof linetest > gprof.log )
+
 ok(1);
 1;
