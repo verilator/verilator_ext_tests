@@ -19,7 +19,8 @@ setenv('VERILATOR', "$ENV{VERILATOR_ROOT}/bin/verilator");
 # Note the build happens in $Self->{obj_dir} as the SweRV build system can
 # find everything via RV_ROOT. This leaves the submodule clean.
 run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
-            "VERILATOR='$ENV{VERILATOR} --debug-check ".join(' ',$Self->driver_verilator_flags()),"'",
+            "VERILATOR='$ENV{VERILATOR} --debug-check -Wno-IMPLICITSTATIC "
+            .join(' ',$Self->driver_verilator_flags()),"'",
             "CONF_PARAMS=-iccm_enable=1",
             "GCC_PREFIX=none TEST=cmark_iccm",
             "VERILATOR_MAKE_FLAGS=VM_PARALLEL_BUILDS=1 verilator"],
@@ -31,7 +32,7 @@ file_grep("$Self->{obj_dir}/sim.log", qr/.*\nTEST_PASSED\n/is);
 # Profiling:
 #  add to cmd: --debug-check --prof-cfuncs -CFLAGS -pg -LDFLAGS -pg
 #  cd /svaha/wsnyder/SandBox/homecvs/v4/verilator_ext_tests/obj_vlt/t_cores_swerv_cmark
-#  gprof 
+#  gprof
 
 ok(1);
 1;

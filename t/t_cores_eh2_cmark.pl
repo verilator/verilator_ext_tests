@@ -20,7 +20,7 @@ setenv('VERILATOR', "$ENV{VERILATOR_ROOT}/bin/verilator");
 # find everything via RV_ROOT. This leaves the submodule clean.
 run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
             # When Verilator v5.000 is master, the '--future0 timing' may be removed
-            "VERILATOR='$ENV{VERILATOR} --debug-check --future0 timing --timing "
+            "VERILATOR='$ENV{VERILATOR} --debug-check -Wno-IMPLICITSTATIC --future0 timing --timing "
             . join(' ',$Self->driver_verilator_flags()),"'",
             "CONF_PARAMS=-iccm_enable=1",
             "GCC_PREFIX=none TEST=cmark_iccm",
