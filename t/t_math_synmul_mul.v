@@ -26,11 +26,11 @@ module t_math_synmul_mul ( /*AUTOARG*/
 
    always @ (posedge clk) begin
       if (enable) begin
-	 datA_d1r <= {2'b0,datA};
-	 datB_d1r <= {2'b0,datB};
-	 // The extra multiplier bits were for signed, for this
-	 // test we've ripped that out
-	 if (negate) $stop;
+         datA_d1r <= {2'b0,datA};
+         datB_d1r <= {2'b0,datB};
+         // The extra multiplier bits were for signed, for this
+         // test we've ripped that out
+         if (negate) $stop;
       end
    end
 
@@ -46,17 +46,17 @@ module t_math_synmul_mul ( /*AUTOARG*/
    wire [63:0] prod_d3;
 
    smmultiplier_34_34 mul (.OPA(datA_d1r),
-			   .OPB(datB_d1r),
-			   .RESULT(prod_d3),
-			   /*AUTOINST*/
-			   // Inputs
-			   .clk			(clk),
-			   .en_d1		(en_d1),
-			   .en_d2		(en_d2));
+                           .OPB(datB_d1r),
+                           .RESULT(prod_d3),
+                           /*AUTOINST*/
+                           // Inputs
+                           .clk                 (clk),
+                           .en_d1               (en_d1),
+                           .en_d2               (en_d2));
 
    always @ (posedge clk) begin
       if (en_d3) begin
-	 product_d4 <= {1'b0,prod_d3};
+         product_d4 <= {1'b0,prod_d3};
       end
    end
 
@@ -83,11 +83,11 @@ module smmultiplier_34_34
    wire [66:0] INT_SUM;
    smboothcoder_34_34 db (.OPA(OPA[33:0]), .OPB(OPB[33:0]), .SUMMAND(PPBIT[628:0]) );
    smwallace_34_34 dw (.SUMMAND(PPBIT[628:0]), .CARRY(INT_CARRY[66:1]), .SUM(INT_SUM[66:0]),
-		       /*AUTOINST*/
-		       // Inputs
-		       .clk		(clk),
-		       .en_d1		(en_d1),
-		       .en_d2		(en_d2));
+                       /*AUTOINST*/
+                       // Inputs
+                       .clk             (clk),
+                       .en_d1           (en_d1),
+                       .en_d2           (en_d2));
    assign INT_CARRY[0] = 1'b0;
    smdblcadder_128_128 dd (.OPA(INT_SUM[63:0]), .OPB(INT_CARRY[63:0]), .CIN (1'b0), .SUM(RESULT));
 endmodule
@@ -2921,7 +2921,7 @@ module smffa
    output reg Q
    );
    always @ (posedge clk) begin
-   	Q <= D;
+        Q <= D;
    end
 endmodule
 
@@ -2933,7 +2933,7 @@ module smffb
    output reg Q
    );
    always @ (posedge clk) begin
-   	Q <= D;
+        Q <= D;
    end
 endmodule
 

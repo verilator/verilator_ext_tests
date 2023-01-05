@@ -55,7 +55,7 @@ module t_math_wallace_mul ( /*AUTOARG*/
    wire [129:0] l1ppin31;
    wire [129:0] l1ppin32;
    wire [129:0] l1ppin33;
-   
+
    wire [63:0]  l1sumg0;
    wire [63:0]  l1sumg1;
    wire [63:0]  l1sumg2;
@@ -64,44 +64,44 @@ module t_math_wallace_mul ( /*AUTOARG*/
    wire [63:0]  l1carryg1;
    wire [63:0]  l1carryg2;
    wire [63:0]  l1carryg3;
-   
+
    wire [63:0]  l2sumg0;
    wire [63:0]  l2carryg0;
-   
+
    wire [64:0]  l1cin0g0;
    wire [64:0]  l1cin0g1;
    wire [64:0]  l1cin0g2;
    wire [64:0]  l1cin0g3;
-   
+
    wire [64:0]  l1cin1g0;
    wire [64:0]  l1cin1g1;
    wire [64:0]  l1cin1g2;
    wire [64:0]  l1cin1g3;
-   
+
    wire [64:0]  l1cin2g0;
    wire [64:0]  l1cin2g1;
    wire [64:0]  l1cin2g2;
    wire [64:0]  l1cin2g3;
-   
+
    wire [64:0]  l1cin3g0;
    wire [64:0]  l1cin3g1;
    wire [64:0]  l1cin3g2;
-   
+
    wire [64:0]  l1cin4g0;
    wire [64:0]  l1cin4g1;
    wire [64:0]  l1cin4g2;
-   
+
    wire [64:0]  l1cin5g0;
    wire [64:0]  l1cin5g1;
    wire [64:0]  l1cin5g2;
-   
+
    wire [64:0]  l2cin0g0;
    wire [64:0]  l2cin1g0;
    wire [64:0]  l2cin2g0;
    wire [64:0]  l2cin3g0;
    wire [64:0]  l2cin4g0;
    wire [64:0]  l2cin5g0;
-   
+
    reg          enable_d1;
    reg          enable_d2;
    reg          enable_d3;
@@ -283,7 +283,7 @@ module t_math_wallace_mul ( /*AUTOARG*/
                              .cin3              (l1cin3g0[i]),
                              .cin4              (l1cin4g0[i]),
                              .cin5              (l1cin5g0[i]));
-         
+
          TmpCsa9to2 l1csag1 (
                              // Outputs
                              .cout0             (l1cin0g1[i+1]),
@@ -310,7 +310,7 @@ module t_math_wallace_mul ( /*AUTOARG*/
                              .cin3              (l1cin3g1[i]),
                              .cin4              (l1cin4g1[i]),
                              .cin5              (l1cin5g1[i]));
-         
+
          TmpCsa9to2 l1csag2 (
                              // Outputs
                              .cout0             (l1cin0g2[i+1]),
@@ -337,7 +337,7 @@ module t_math_wallace_mul ( /*AUTOARG*/
                              .cin3              (l1cin3g2[i]),
                              .cin4              (l1cin4g2[i]),
                              .cin5              (l1cin5g2[i]));
-         
+
          TmpCsa6to2 l1csag3 (
                              // Outputs
                              .cout0             (l1cin0g3[i+1]),
