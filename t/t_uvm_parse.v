@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 // All the heavy lifting needed here
-`include "submodules/uvm/src/uvm_pkg.sv"
+`include "uvm_pkg.sv"
 
 module t (/*AUTOARG*/);
    initial begin
