@@ -24,8 +24,7 @@ my $CFG_CXXFLAGS_STD_NEWEST = $1;
 # Note the build happens in $Self->{obj_dir} as the SweRV build system can
 # find everything via RV_ROOT. This leaves the submodule clean.
 run(cmd => ["make -j4 -C $Self->{obj_dir} -f $ENV{RV_ROOT}/tools/Makefile",
-            # When Verilator v5.000 is master, the '--future0 timing' may be removed
-            ("VERILATOR='$ENV{VERILATOR} --debug-check -Wno-IMPLICITSTATIC --future0 timing --timing "
+            ("VERILATOR='$ENV{VERILATOR} --debug-check -Wno-IMPLICITSTATIC --stats --timing "
              . join(' ',$Self->driver_verilator_flags())
              . "'"),
             # Because Cores-SweRV-EH2/tools/Makefile has -std=c++11 which is too old
