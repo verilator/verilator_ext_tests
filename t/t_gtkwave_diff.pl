@@ -25,7 +25,7 @@ if (!$ENV{VERILATOR_TEST_UPSTREAM}) {
     skip("Skipping due to no VERILATOR_TEST_UPSTREAM");
 } else {
     print `pwd`;
-    my $g = "submodules/gtkwave/gtkwave3-gtk3";
+    my $g = "submodules/gtkwave";
     my $v = $ENV{VERILATOR_ROOT} || "submodules/verilator";
 
     check("$g/src", "$v/include/gtkwave", "wavealloca.h");
