@@ -28,13 +28,13 @@ if (!$ENV{VERILATOR_TEST_UPSTREAM}) {
     my $g = "submodules/gtkwave";
     my $v = $ENV{VERILATOR_ROOT} || "submodules/verilator";
 
-    check("$g/src", "$v/include/gtkwave", "wavealloca.h");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.h");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "fastlz.c");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.h");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "fstapi.c");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.h");
-    check("$g/src/helpers/fst", "$v/include/gtkwave", "lz4.c");
+    check("$g/src/helpers", "$v/include/gtkwave", "wavealloca.h");
+    check("$g/lib/libfst", "$v/include/gtkwave", "fastlz.h");
+    check("$g/lib/libfst", "$v/include/gtkwave", "fastlz.c");
+    check("$g/lib/libfst", "$v/include/gtkwave", "fstapi.h");
+    check("$g/lib/libfst", "$v/include/gtkwave", "fstapi.c");
+    check("$g/lib/libfst", "$v/include/gtkwave", "lz4.h");
+    check("$g/lib/libfst", "$v/include/gtkwave", "lz4.c");
 
     ok(1);
 }
