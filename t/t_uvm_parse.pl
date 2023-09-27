@@ -15,7 +15,7 @@ my $uvm_root = File::Spec->rel2abs($Self->{t_dir}."/../submodules/uvm");
 
 lint(
     v_flags2 => ["+incdir+${uvm_root}/src",
-                 "-Wall -Wno-DECLFILENAME -Wno-VARHIDDEN -Wno-RANDC -Wno-CONSTRAINTIGN -Wno-MISINDENT",
+                 "-Wall -Wno-DECLFILENAME -Wno-VARHIDDEN -Wno-CONSTRAINTIGN -Wno-MISINDENT",
                  "--debug-exit-uvm",
     ],
     );
