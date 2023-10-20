@@ -5,6 +5,8 @@
 // any use, without warranty, 2019 by Wilson Snyder.
 // SPDX-License-Identifier: CC0-1.0
 
+`define UVM_NO_DPI
+
 // All the heavy lifting needed here
 `include "uvm_pkg.sv"
 
