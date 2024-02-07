@@ -22,3 +22,12 @@
 [submodule "submodules/uvm"]
 	path = submodules/uvm
 	url = https://github.com/chipsalliance/uvm-verilator.git
+[submodule "submodules/Cores-VeeR-EL2"]
+	path = submodules/Cores-VeeR-EL2
+	url = https://github.com/chipsalliance/Cores-VeeR-EL2.git
+[submodule "submodules/Cores-VeeR-EH2"]
+	path = submodules/Cores-VeeR-EH2
+	url = https://github.com/chipsalliance/Cores-VeeR-EH2.git
+[submodule "submodules/Cores-VeeR-EH1"]
+	path = submodules/Cores-VeeR-EH1
+	url = https://github.com/chipsalliance/Cores-VeeR-EH1.git
