@@ -31,3 +31,6 @@
 [submodule "submodules/Cores-VeeR-EH1"]
 	path = submodules/Cores-VeeR-EH1
 	url = https://github.com/chipsalliance/Cores-VeeR-EH1.git
+[submodule "submodules/astsee"]
+	path = submodules/astsee
+	url = https://github.com/antmicro/astsee.git
