@@ -34,7 +34,7 @@ DRIVER_FLAGS ?= -j 0 --quiet --rerun
 SCENARIOS ?= --vlt --vltmt --dist
 
 test:
-	t/bootstrap.pl $(DRIVER_FLAGS) $(SCENARIOS) t/t_*.pl
+	t/vltest_bootstrap.py $(DRIVER_FLAGS) $(SCENARIOS) t/t_*.py
 
 ######################################################################
 

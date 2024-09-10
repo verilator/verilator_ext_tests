@@ -21,7 +21,7 @@ Run an individual test:
 ```
 export VERILATOR_ROOT=location  # if your shell is bash
 setenv VERILATOR_ROOT location  # if your shell is csh
-t/t_a_hello.pl
+t/t_a_hello.py
 ```
 
 Automatically run these tests as part of normal Verilator "make test"
@@ -39,7 +39,7 @@ make clean
 
 # Adding additional tests
 
-To add additional tests, add a `t/t_{name}.pl` file.  See the Verilator
+To add additional tests, add a `t/t_{name}.py` file.  See the Verilator
 internals documentation for instructions on the test file format.
 
 To be accepted in this package, an external submodule tested here must:
