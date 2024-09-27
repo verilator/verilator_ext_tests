@@ -32,7 +32,7 @@ test.run(
         "make -j4 -C " + test.obj_dir + " -f " + os.environ["RV_ROOT"] +
         "/tools/Makefile",
         ("VERILATOR='" + os.environ["VERILATOR"] +
-         " --debug-check -Wno-IMPLICITSTATIC --stats --timing" +
+         " --debug-check -Wno-IMPLICITSTATIC --stats --timing " +
          ' '.join(test.driver_verilator_flags) + "'"),
         # Because Cores-VeeR-EH2/tools/Makefile has -std=c++11 which is too old
         # Unfortunately it's too late in the Makefile to pass in VERILATOR above
