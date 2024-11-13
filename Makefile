@@ -38,7 +38,7 @@ test:
 
 ######################################################################
 
-git-update:
+git-update git-pull:
 	git pull
 	git submodule update --remote --merge
 

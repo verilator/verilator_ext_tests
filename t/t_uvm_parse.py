@@ -13,10 +13,7 @@ test.scenarios('vlt')
 
 uvm_root = os.path.abspath(test.t_dir + "/../submodules/uvm")
 
-test.lint(v_flags=[
-    "+incdir+" + uvm_root + "/src",
-    "-Wall -Wno-DECLFILENAME -Wno-VARHIDDEN -Wno-CONSTRAINTIGN -Wno-MISINDENT",
-    "--debug-exit-uvm"
-])
+test.lint(
+    v_flags=["+incdir+" + uvm_root + "/src", "-Wall", "--debug-exit-uvm"])
 
 test.passes()

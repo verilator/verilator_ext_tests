@@ -10,6 +10,8 @@
 // All the heavy lifting needed here
 `include "uvm_pkg.sv"
 
+// verilator lint_off DECLFILENAME
+
 module t (/*AUTOARG*/);
    initial begin
       $write("Hello World\n");
