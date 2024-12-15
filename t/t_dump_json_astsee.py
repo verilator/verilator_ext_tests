@@ -19,7 +19,7 @@ if 'usage:' not in out:
 test.lint(v_flags=["--lint-only --dump-tree-json"])
 
 test.run(cmd=[
-    "cd " + test.obj_dir + " && astsee_verilator *001*.json > astsee.log"
+    "cd " + test.obj_dir + " && astsee_verilator *002*.json > astsee.log"
 ],
          logfile=test.obj_dir + "/astsee.log")
 
