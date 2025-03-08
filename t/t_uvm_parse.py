@@ -14,6 +14,8 @@ test.scenarios('vlt')
 uvm_root = os.path.abspath(test.t_dir + "/../submodules/uvm")
 
 test.lint(
-    v_flags=["+incdir+" + uvm_root + "/src", "-Wall", "--debug-exit-uvm"])
+    v_flags=["--timing", "-Wall", "--debug-exit-uvm",
+             #
+             "+incdir+" + uvm_root + "/src"])
 
 test.passes()
