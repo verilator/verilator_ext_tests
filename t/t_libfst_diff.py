@@ -27,15 +27,14 @@ if 'VERILATOR_TEST_UPSTREAM' not in os.environ:
     test.skip("Skipping due to no VERILATOR_TEST_UPSTREAM")
 
 print(os.getcwd)
-g = "submodules/gtkwave"
+g = "submodules/libfst"
 v = os.environ['VERILATOR_ROOT']
 
-check(g + "/src/helpers", v + "/include/gtkwave", "wavealloca.h")
-check(g + "/lib/libfst", v + "/include/gtkwave", "fastlz.h")
-check(g + "/lib/libfst", v + "/include/gtkwave", "fastlz.c")
-check(g + "/lib/libfst", v + "/include/gtkwave", "fstapi.h")
-check(g + "/lib/libfst", v + "/include/gtkwave", "fstapi.c")
-check(g + "/lib/libfst", v + "/include/gtkwave", "lz4.h")
-check(g + "/lib/libfst", v + "/include/gtkwave", "lz4.c")
+check(g + "/src", v + "/include/gtkwave", "fastlz.h")
+check(g + "/src", v + "/include/gtkwave", "fastlz.c")
+check(g + "/src", v + "/include/gtkwave", "fstapi.h")
+check(g + "/src", v + "/include/gtkwave", "fstapi.c")
+check(g + "/src", v + "/include/gtkwave", "lz4.h")
+check(g + "/src", v + "/include/gtkwave", "lz4.c")
 
 test.passes()

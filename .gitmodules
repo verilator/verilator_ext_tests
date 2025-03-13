@@ -25,9 +25,6 @@
 [submodule "submodules/example-systemverilog"]
 	path = submodules/example-systemverilog
 	url = https://github.com/verilator/example-systemverilog.git
-[submodule "submodules/gtkwave"]
-	path = submodules/gtkwave
-	url = https://github.com/gtkwave/gtkwave.git
 [submodule "submodules/sv-bugpoint"]
 	path = submodules/sv-bugpoint
 	url = https://github.com/antmicro/sv-bugpoint
@@ -37,3 +34,6 @@
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
 	url = https://github.com/ZipCPU/wbuart32.git
+[submodule "submodules/libfst"]
+	path = submodules/libfst
+	url = https://github.com/gtkwave/libfst.git
