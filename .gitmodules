@@ -4,36 +4,48 @@
 [submodule "submodules/Cores-SweRV"]
 	path = submodules/Cores-SweRV
 	url = https://github.com/chipsalliance/Cores-SweRV.git
+	shallow = true
 [submodule "submodules/Cores-SweRV-EH2"]
 	path = submodules/Cores-SweRV-EH2
 	url = https://github.com/chipsalliance/Cores-SweRV-EH2.git
+	shallow = true
 [submodule "submodules/Cores-SweRV-EL2"]
 	path = submodules/Cores-SweRV-EL2
 	url = https://github.com/chipsalliance/Cores-SweRV-EL2.git
+	shallow = true
 [submodule "submodules/Cores-VeeR-EH1"]
 	path = submodules/Cores-VeeR-EH1
 	url = https://github.com/chipsalliance/Cores-VeeR-EH1.git
+	shallow = true
 [submodule "submodules/Cores-VeeR-EH2"]
 	path = submodules/Cores-VeeR-EH2
 	url = https://github.com/chipsalliance/Cores-VeeR-EH2.git
+	shallow = true
 [submodule "submodules/Cores-VeeR-EL2"]
 	path = submodules/Cores-VeeR-EL2
 	url = https://github.com/chipsalliance/Cores-VeeR-EL2.git
+	shallow = true
 [submodule "submodules/astsee"]
 	path = submodules/astsee
 	url = https://github.com/antmicro/astsee.git
+	shallow = true
 [submodule "submodules/example-systemverilog"]
 	path = submodules/example-systemverilog
 	url = https://github.com/verilator/example-systemverilog.git
+	shallow = true
 [submodule "submodules/sv-bugpoint"]
 	path = submodules/sv-bugpoint
 	url = https://github.com/antmicro/sv-bugpoint
+	shallow = true
 [submodule "submodules/uvm"]
 	path = submodules/uvm
 	url = https://github.com/chipsalliance/uvm-verilator.git
+	shallow = true
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
 	url = https://github.com/ZipCPU/wbuart32.git
+	shallow = true
 [submodule "submodules/libfst"]
 	path = submodules/libfst
 	url = https://github.com/gtkwave/libfst.git
+	shallow = true
