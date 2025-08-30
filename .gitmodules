@@ -1,6 +1,7 @@
 [submodule "submodules/verilator"]
 	path = submodules/verilator
 	url = https://github.com/verilator/verilator.git
+	shallow = true
 [submodule "submodules/Cores-SweRV"]
 	path = submodules/Cores-SweRV
 	url = https://github.com/chipsalliance/Cores-SweRV.git
