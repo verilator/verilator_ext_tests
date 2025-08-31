@@ -14,7 +14,7 @@ test.top_filename = os.environ["VERILATOR_ROOT"] + "/test_regress/t/t_dump.v"
 
 out = test.run_capture("astsee_verilator -h 2>&1", check=False)
 if 'usage:' not in out:
-    test.skip("No astsee installed\n")
+    test.skip("No astsee installed")
 
 test.lint(v_flags=["--lint-only --dump-tree-json"])
 
