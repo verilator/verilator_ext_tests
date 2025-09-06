@@ -17,13 +17,17 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   vlt:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: build and test
     env:
       CI_OS_NAME: linux
-      CI_RUNS_ON: ubuntu-22.04
+      CI_RUNS_ON: ubuntu-24.04
       CI_COMMIT: ${{ github.sha }}
       CCACHE_COMPRESS: 1
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -61,13 +65,19 @@ jobs:
           CI_BUILD_STAGE_NAME: build
         run: cd submodules/verilator && bash ci/ci-script.bash
 
+      - name: Save cache  # So faster to rerun if a test below fails
+        uses: actions/cache/save@v4
+        id: cache
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ github.sha }}
+
       - name: Install packages for tests
         env:
           CI_BUILD_STAGE_NAME: test
         run: |
-          cd submodules/verilator && bash ci/ci-install.bash
-          PIP_BREAK_SYSTEM_PACKAGES=1 sudo pip install --upgrade pip
-          PIP_BREAK_SYSTEM_PACKAGES=1 sudo pip install ../astsee
+          ( cd submodules/verilator && bash ci/ci-install.bash )
+          pipx install submodules/astsee
 
       - name: Test
         run: |

@@ -14,7 +14,11 @@ test.top_filename = "t/t_dump.v"
 
 out = test.run_capture("astsee_verilator -h 2>&1", check=False)
 if 'usage:' not in out:
-    test.skip("No astsee installed")
+    test.skip("No astsee command installed")
+
+out = test.run_capture("python -c 'import astsee' 2>&1", check=False)
+if 'NotFoundError:' in out:
+    test.skip("No astsee package file installed")
 
 test.setenv(
     "VERILATOR_GDB", "gdb --return-child-result" +
