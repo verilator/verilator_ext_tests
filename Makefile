@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 #****************************************************************************/
-# Please see docs/README.md for most information.
+# Please see README.rst for most information.
 #
 # make test
 #      To run all tests
@@ -26,7 +26,7 @@
 #****************************************************************************/
 
 default:
-	@echo See docs/README.md for information on using these tests.
+	@echo See README.rst for information on using these tests.
 
 ######################################################################
 
