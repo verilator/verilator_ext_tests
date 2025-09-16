@@ -8,6 +8,7 @@
 # SPDX-License-Identifier: LGPL-3.0-only OR Artistic-2.0
 
 import vltest_bootstrap
+import sysconfig
 
 test.scenarios('vlt')
 test.top_filename = "t/t_dump.v"
@@ -19,6 +20,11 @@ if 'usage:' not in out:
 out = test.run_capture("python -c 'import astsee' 2>&1", check=False)
 if 'NotFoundError:' in out:
     test.skip("No astsee package file installed")
+
+purelib = sysconfig.get_paths().get("purelib", "")
+platlib = sysconfig.get_paths().get("platlib", "")
+pythonpaths = [p for p in (purelib, platlib, test.getenv_def("PYTHONPATH")) if p]
+test.setenv("PYTHONPATH", os.pathsep.join(pythonpaths))
 
 test.setenv(
     "VERILATOR_GDB", "gdb --return-child-result" +

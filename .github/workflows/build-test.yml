@@ -77,9 +77,10 @@ jobs:
           CI_BUILD_STAGE_NAME: test
         run: |
           ( cd submodules/verilator && bash ci/ci-install.bash )
-          pipx install submodules/astsee
+          pipx install --system-site-packages submodules/astsee
 
       - name: Test
         run: |
           export VERILATOR_ROOT=$GITHUB_WORKSPACE/submodules/verilator
+          source /opt/pipx/venvs/astsee/bin/activate
           make test
