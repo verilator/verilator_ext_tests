@@ -28,7 +28,6 @@ jobs:
     env:
       CI_OS_NAME: linux
       CI_RUNS_ON: ubuntu-24.04
-      CI_COMMIT: ${{ github.sha }}
       CCACHE_COMPRESS: 1
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 4Gi
