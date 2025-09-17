@@ -28,7 +28,6 @@ jobs:
     env:
       CI_OS_NAME: linux
       CI_RUNS_ON: ubuntu-24.04
-      CI_COMMIT: ${{ github.sha }}
       CCACHE_COMPRESS: 1
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 4Gi
@@ -58,7 +57,7 @@ jobs:
           sudo cpan -fi Bit::Vector  # For t_cores_el2_cmark
 
       - name: CCACHE maintenance
-        run: mkdir -p $CCACHE_DIR && cd submodules/verilator && bash ci/ci-ccache-maint.bash
+        run: mkdir -p $CCACHE_DIR && ccache --version && ccache -s -z
 
       - name: Build
         env:
