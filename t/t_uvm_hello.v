@@ -12,10 +12,10 @@
 
 // verilator lint_off DECLFILENAME
 
-module t (/*AUTOARG*/);
-   initial begin
-      $write("Hello World\n");
-      $write("*-* All Finished *-*\n");
-      $finish;
-   end
+module t;
+  import uvm_pkg::*;
+  initial begin
+    // verilator lint_off WIDTHTRUNC
+    `uvm_info("TOP", "Hello World!", UVM_MEDIUM);
+  end
 endmodule
