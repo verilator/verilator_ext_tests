@@ -23,7 +23,9 @@ if 'NotFoundError:' in out:
 
 purelib = sysconfig.get_paths().get("purelib", "")
 platlib = sysconfig.get_paths().get("platlib", "")
-pythonpaths = [p for p in (purelib, platlib, test.getenv_def("PYTHONPATH")) if p]
+pythonpaths = [
+    p for p in (purelib, platlib, test.getenv_def("PYTHONPATH")) if p
+]
 test.setenv("PYTHONPATH", os.pathsep.join(pythonpaths))
 
 test.setenv(
