@@ -41,7 +41,7 @@
 [submodule "submodules/uvm"]
 	path = submodules/uvm
 	url = https://github.com/chipsalliance/uvm-verilator.git
-	shallow = true
+	shallow = false
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
 	url = https://github.com/ZipCPU/wbuart32.git

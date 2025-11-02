@@ -22,11 +22,13 @@ if not os.path.exists(uvm_root):
         " 2017-1.0"
     ])
 
-test.compile(v_flags=[
-    "--binary -j 0 -Wall",  #
-    "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
-    "+incdir+" + uvm_root + "/src"
-])
+test.compile(
+    v_flags2=["+define+UVM_NO_DPI"],
+    verilator_flags2=[
+        "--binary -j 0 -Wall --dump-inputs",  #
+        "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
+        "+incdir+" + uvm_root + "/src"
+    ])
 
 test.execute()
 
