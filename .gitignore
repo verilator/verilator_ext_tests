@@ -1,4 +1,5 @@
 obj_*
 *.swp
 .gdb_history
+*private*
 t/__pycache__
