@@ -18,9 +18,9 @@ uvm_root = os.path.abspath(test.obj_dir + "/uvm-worktree")
 if not os.path.exists(uvm_root):
     test.run(cmd=[
         "cd " + uvm_git +
-        " && git fetch --tags"  # .gitmodules doesn't pull tags
+        # " && git fetch --tags"  # .gitmodules doesn't pull tags - now using branch
         " && git worktree prune && git worktree add --detach " + uvm_root +
-        " 2017-1.0"
+        " origin/uvm-2017-1.0-vlt"
     ])
 
 ## Make uvm_pkg_all
