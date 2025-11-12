@@ -38,10 +38,6 @@
 	path = submodules/sv-bugpoint
 	url = https://github.com/antmicro/sv-bugpoint
 	shallow = true
-[submodule "submodules/uvm"]
-	path = submodules/uvm
-	url = https://github.com/chipsalliance/uvm-verilator.git
-	shallow = false
 [submodule "submodules/wbuart32"]
 	path = submodules/wbuart32
 	url = https://github.com/ZipCPU/wbuart32.git
@@ -49,4 +45,14 @@
 [submodule "submodules/libfst"]
 	path = submodules/libfst
 	url = https://github.com/gtkwave/libfst.git
+	shallow = true
+[submodule "submodules/uvm-2017-1.0-vlt"]
+	path = submodules/uvm-2017-1.0-vlt
+	url = https://github.com/chipsalliance/uvm-verilator.git
+	branch = uvm-2017-1.0-vlt
+	shallow = true
+[submodule "submodules/uvm-2020-3.1-vlt"]
+	path = submodules/uvm-2020-3.1-vlt
+	url = https://github.com/chipsalliance/uvm-verilator.git
+	branch = uvm-2020-3.1-vlt
 	shallow = true
