@@ -12,17 +12,9 @@ import vltest_bootstrap
 test.scenarios('vlt')
 test.top_filename = "t/t_uvm_hello.v"
 
-uvm_git = os.path.abspath(test.t_dir + "/../submodules/uvm")
-uvm_root = os.path.abspath(test.obj_dir + "/uvm-worktree")
+uvm_root = os.path.abspath(test.t_dir + "/../submodules/uvm-2020-3.1-vlt")
 
 test.pli_filename = uvm_root + "/src/dpi/uvm_dpi.cc"
-
-if not os.path.exists(uvm_root):
-    test.run(cmd=[
-        "cd " + uvm_git +
-        " && git worktree prune && git worktree add --detach " + uvm_root +
-        " origin/uvm-2020-3.1-vlt"
-    ])
 
 ## Test
 
