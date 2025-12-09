@@ -13,14 +13,42 @@ test.scenarios('vlt')
 test.top_filename = "t/t_uvm_hello.v"
 
 uvm_root = os.path.abspath(test.t_dir + "/../submodules/uvm-2017-1.0-vlt")
-
 test.pli_filename = uvm_root + "/src/dpi/uvm_dpi.cc"
+
+## Make uvm_pkg_all
+
+e_filename = test.obj_dir + "/pp__" + test.name + "__all1.vpp"
+
+test.run(
+    cmd=[
+        os.environ["VERILATOR_ROOT"] + "/bin/verilator",
+        "--E --preproc-defines --no-preproc-comments ",  #
+        "+incdir+" + uvm_root + "/src",
+        test.top_filename,
+        "> " + e_filename,
+    ],
+    verilator_run=True)
+
+packed_filename = test.obj_dir + "/pp__" + test.name + "__all2.vpp"
+
+test.run(cmd=[
+    os.environ["VERILATOR_ROOT"] + "/nodist/uvm_pkg_packer",
+    "--test-name " + test.name,
+    "--uvm-header-filename " + uvm_root + "/src/uvm_pkg.sv",  #
+    "< " + e_filename,
+    "> " + packed_filename,
+])
+
+test.copy_if_golden(
+    packed_filename, os.environ["VERILATOR_ROOT"] +
+    "/test_regress/t/uvm/uvm_pkg_all_v2017_1_0_dpi.svh")
 
 ## Test
 
 test.compile(verilator_flags2=[
     "--binary -j 0 -Wall --dump-inputs",  #
     "--vpi",  #
+    "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
     "+incdir+" + uvm_root + "/src",
     test.pli_filename,
 ])
