@@ -50,9 +50,9 @@
 	path = submodules/uvm-2017-1.0-vlt
 	url = https://github.com/chipsalliance/uvm-verilator.git
 	branch = uvm-2017-1.0-vlt
-	shallow = true
+	shallow = false
 [submodule "submodules/uvm-2020-3.1-vlt"]
 	path = submodules/uvm-2020-3.1-vlt
 	url = https://github.com/chipsalliance/uvm-verilator.git
 	branch = uvm-2020-3.1-vlt
-	shallow = true
+	shallow = false
