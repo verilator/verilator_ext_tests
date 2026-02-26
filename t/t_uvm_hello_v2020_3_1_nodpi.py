@@ -50,6 +50,7 @@ test.compile(
     verilator_flags2=[
         "--binary",
         test.build_jobs,
+        "-CFLAGS -O0",  #
         "-Wall --dump-inputs",  #
         "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
         "+incdir+" + uvm_root + "/src",

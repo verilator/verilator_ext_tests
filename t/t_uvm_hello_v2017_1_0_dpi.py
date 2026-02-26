@@ -48,6 +48,7 @@ test.copy_if_golden(
 test.compile(verilator_flags2=[
     "--binary",
     test.build_jobs,
+    "-CFLAGS -O0",  #
     "-Wall --dump-inputs",  #
     "--vpi",  #
     "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
