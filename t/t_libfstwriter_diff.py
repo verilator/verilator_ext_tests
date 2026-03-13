@@ -27,14 +27,16 @@ if 'VERILATOR_TEST_UPSTREAM' not in os.environ:
     test.skip("Skipping due to no VERILATOR_TEST_UPSTREAM")
 
 print(os.getcwd)
-g = "submodules/libfst"
-v = os.environ['VERILATOR_ROOT']
+g = "submodules/libfstwriter/fstcpp/"
+v = os.environ['VERILATOR_ROOT'] + "/include/fstcpp/"
 
-check(g + "/src", v + "/include/gtkwave", "fastlz.h")
-check(g + "/src", v + "/include/gtkwave", "fastlz.c")
-check(g + "/src", v + "/include/gtkwave", "fstapi.h")
-check(g + "/src", v + "/include/gtkwave", "fstapi.c")
-check(g + "/src", v + "/include/gtkwave", "lz4.h")
-check(g + "/src", v + "/include/gtkwave", "lz4.c")
+check(g, v, "fstcpp.h")
+check(g, v, "fstcpp_assertion.h")
+check(g, v, "fstcpp_file.h")
+check(g, v, "fstcpp_stream_write_helper.h")
+check(g, v, "fstcpp_variable_info.cpp")
+check(g, v, "fstcpp_variable_info.h")
+check(g, v, "fstcpp_writer.cpp")
+check(g, v, "fstcpp_writer.h")
 
 test.passes()
