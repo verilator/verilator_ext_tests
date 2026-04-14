@@ -50,6 +50,7 @@ git-clean:
 
 clean mostlyclean distclean maintainer-clean::
 	rm -rf */obj_*
+	rm -rf */__pycache__
 	rm -rf obj_*
 	for p in submodules/* ; do \
 	   test -e $$p/Makefile && $(MAKE) -C $$p --no-print-directory clean ; \
