@@ -36,7 +36,8 @@ test.run(
          ' '.join(test.driver_verilator_flags) + "'"),
         # Because Cores-VeeR-EH2/tools/Makefile has -std=c++11 which is too old
         # Unfortunately it's too late in the Makefile to pass in VERILATOR above
-        "VERILATOR_DEBUG='-CFLAGS " + CFG_CXXFLAGS_STD_NEWEST + "'",  #
+        "VERILATOR_DEBUG='-CFLAGS " + CFG_CXXFLAGS_STD_NEWEST +
+        " -CFLAGS -Wno-error=array-bounds'",  #
         "CONF_PARAMS=-iccm_enable=1",
         "GCC_PREFIX=none TEST=cmark_iccm",
         "VERILATOR_MAKE_FLAGS=VM_PARALLEL_BUILDS=1 verilator"
