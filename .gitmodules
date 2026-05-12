@@ -42,10 +42,6 @@
 	path = submodules/wbuart32
 	url = https://github.com/ZipCPU/wbuart32.git
 	shallow = true
-[submodule "submodules/libfst"]
-	path = submodules/libfst
-	url = https://github.com/gtkwave/libfst.git
-	shallow = true
 [submodule "submodules/uvm-2017-1.0-vlt"]
 	path = submodules/uvm-2017-1.0-vlt
 	url = https://github.com/chipsalliance/uvm-verilator.git
@@ -56,3 +52,6 @@
 	url = https://github.com/chipsalliance/uvm-verilator.git
 	branch = uvm-2020-3.1-vlt
 	shallow = false
+[submodule "submodules/libfstwriter"]
+	path = submodules/libfstwriter
+	url = https://github.com/gtkwave/libfstwriter
