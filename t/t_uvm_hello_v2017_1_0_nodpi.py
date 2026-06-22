@@ -49,7 +49,7 @@ test.compile(
     v_flags2=["+define+UVM_NO_DPI"],
     verilator_flags2=[
         "--binary",
-        test.build_jobs,
+        test.build_jobs_groups,
         "-CFLAGS -O0",  #
         "-Wall --dump-inputs",  #
         "-Wno-EOFNEWLINE",  # Temp - need to cleanup UVM repo
