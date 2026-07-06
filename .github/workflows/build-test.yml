@@ -26,9 +26,8 @@ jobs:
     runs-on: ubuntu-24.04
     name: build and test
     env:
-      CI_OS_NAME: linux
-      CI_RUNS_ON: ubuntu-24.04
-      CCACHE_COMPRESS: 1
+      CACHE_KEY: build-ubuntu-24.04-gcc-ccache
+      CCACHE_COMPILERCHECK: content
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 4Gi
     steps:
@@ -38,45 +37,33 @@ jobs:
           submodules: 'recursive'
           fetch-depth: '0'
 
-      - name: Cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5
-        env:
-          cache-name: ccache
+      - name: Restore cache
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5
         with:
-          path: ${{ github.workspace }}/.ccache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ github.sha }}
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ env.CACHE_KEY }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ env.CACHE_KEY }}
 
       - name: Install packages for build
-        env:
-          CI_BUILD_STAGE_NAME: build
         run: |
-          cd submodules/verilator && bash ci/ci-install.bash
+          cd submodules/verilator && bash ci/ci-install.bash build
           sudo cpan -fi Bit::Vector  # For t_cores_el2_cmark
 
-      - name: CCACHE maintenance
-        run: mkdir -p $CCACHE_DIR && ccache --version && ccache -s -z
-
       - name: Build
-        env:
-          CI_BUILD_STAGE_NAME: build
-        run: cd submodules/verilator && bash ci/ci-script.bash
+        run: |
+          cd submodules/verilator
+          bash ci/ci-build.bash --compiler gcc --prefix "${{ github.workspace }}/install" --ccwarn
 
       - name: Save cache  # So faster to rerun if a test below fails
         uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5
-        id: cache
         with:
-          path: ${{ github.workspace }}/.ccache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ github.sha }}
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ env.CACHE_KEY }}-${{ github.sha }}
 
       - name: Install packages for tests
-        env:
-          CI_BUILD_STAGE_NAME: test
         run: |
-          ( cd submodules/verilator && bash ci/ci-install.bash )
+          ( cd submodules/verilator && bash ci/ci-install.bash test )
           pipx install --system-site-packages submodules/astsee
 
       - name: Test
