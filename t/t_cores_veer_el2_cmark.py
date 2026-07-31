@@ -26,6 +26,6 @@ test.run(cmd=[
 ],
          logfile=test.obj_dir + "/sim.log")
 
-test.file_grep(test.obj_dir + "/sim.log", r'\nTEST_PASSED\n')
+test.file_grep(test.obj_dir + "/sim.log", r'TEST_PASSED\n')
 
 test.passes()
