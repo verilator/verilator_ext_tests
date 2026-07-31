@@ -11,7 +11,7 @@ import vltest_bootstrap
 import sysconfig
 
 test.scenarios('vlt')
-test.top_filename = "t/t_dump.v"
+test.top_filename = os.environ["VERILATOR_ROOT"] + "/test_regress/t/t_dump.v"
 
 out = test.run_capture("astsee_verilator -h 2>&1", check=False)
 if 'usage:' not in out:
