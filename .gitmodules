@@ -48,6 +48,11 @@
 	url = https://github.com/chipsalliance/uvm-verilator.git
 	branch = uvm-2020-3.1-vlt
 	shallow = false
+[submodule "submodules/uvm-2020-3.2-vlt"]
+	path = submodules/uvm-2020-3.2-vlt
+	url = https://github.com/chipsalliance/uvm-verilator.git
+	branch = uvm-2020-3.2-vlt
+	shallow = false
 [submodule "submodules/libfstwriter"]
 	path = submodules/libfstwriter
 	url = https://github.com/gtkwave/libfstwriter
