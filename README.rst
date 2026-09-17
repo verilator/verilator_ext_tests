@@ -1,4 +1,4 @@
-.. Copyright 2019-2025 by Wilson Snyder.
+.. Copyright 2019-2026 by Wilson Snyder.
 .. SPDX-License-Identifier: LGPL-3.0-only OR Artistic-2.0
 
 ************************
@@ -16,7 +16,7 @@ To file issues, etc, please see https://verilator.org/issues
 Local Usage
 ===========
 
-Make a verilator checkout
+Make a Verilator checkout
 
 .. code-block:: bash
 
@@ -24,6 +24,11 @@ Make a verilator checkout
    cd verilator_ext_tests
    git submodule init  # first time only
    git submodule update
+
+Run all tests (including UVM if added using below):
+
+.. code-block:: bash
+   make test
 
 Run an individual test:
 
@@ -39,6 +44,14 @@ Automatically run these tests as part of normal Verilator "make test"
 
    export VERILATOR_TESTS_SITE=$VERILATOR_TESTS_SITE:$PWD  # if your shell is bash
    setenv VERILATOR_TESTS_SITE $VERILATOR_TESTS_SITE:$PWD  # if your shell is csh
+
+Add UVM tests to this suite:
+
+.. code-block:: bash
+
+   ln -sf /path/to/uvm-core uvm-core
+   ln -sf /path/to/uvm-tests uvm-tests
+   make uvmgen
 
 Cleanup
 
@@ -69,7 +82,7 @@ Tests and submodules under this package may have different licenses, please
 see the appropriate submodules.  As to this package itself it is under the
 same license as Verilator:
 
-Copyright 2019-2025 by Wilson Snyder.  This program is free software; you
+Copyright 2019-2026 by Wilson Snyder.  This program is free software; you
 can redistribute it and/or modify it under the terms of either the GNU
 Lesser General Public License Version 3 or the Perl Artistic License
 Version 2.0.

@@ -173,19 +173,19 @@ class Analysis:
         for t in sorted(self.data.values(), key=lambda x: x['testname']):
             if t['skip']:
                 continue
-            bad = t['known_failure']
+            unsup = t['known_failure']
             testbase = t['testname']
             testbase = re.sub(r'tests/', '', testbase)
             testbase = re.sub(r'[^a-zA-Z0-9]', '_', testbase)
-            testbase = testbase + ("_bad" if bad else "")
+            testbase = testbase + ("__unsup" if unsup else "")
             filename = os.path.join(path, "t_uvmgen_" + testbase + ".py")
 
             with open(filename, "w") as fh:
-                self._gen_tests_write(t, fh, bad)
+                self._gen_tests_write(t, fh, unsup)
 
             os.chmod(filename, 0o777)
 
-    def _gen_tests_write(self, t, fh, bad):
+    def _gen_tests_write(self, t, fh, unsup):
         fh.write("#!/usr/bin/env python3\n")
         fh.write(
             "# DESCR" +
@@ -214,15 +214,15 @@ class Analysis:
         )
         fh.write("              ' " + t['testname'] + "'],\n")
         fh.write("         logfile=test.run_log_filename,\n")
-        if bad:
+        if unsup:
             fh.write("         fails=True,\n")
         fh.write("         )\n")
         fh.write("\n")
 
-        # Make sure that even the _bad tests compile ok (all currently fail at runtime)
-        if bad:
+        # Make sure that even the __unsup tests compile ok (all currently fail at runtime)
+        if unsup:
             fh.write(
-                "test.file_grep(test.run_log_filename, r'(V e r i l a t i o n   R e p o r t|SKIP \\(verilator only)')\n"
+                "test.file_grep(test.run_log_filename, r'V e r i l a t i o n   R e p o r t')\n"
             )
             fh.write("\n")
 
