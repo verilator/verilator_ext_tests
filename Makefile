@@ -36,6 +36,11 @@ SCENARIOS ?= --vlt --vltmt --dist
 test:
 	t/vltest_bootstrap.py $(DRIVER_FLAGS) $(SCENARIOS) t/t_*.py
 
+uvmgen:
+	nodist/t_uvmgen
+done:
+	nodist/t_uvmgen --done $(VERILATOR_ROOT)
+
 ######################################################################
 
 git-update git-pull pull:
@@ -52,6 +57,7 @@ clean mostlyclean distclean maintainer-clean::
 	rm -rf */obj_*
 	rm -rf */__pycache__
 	rm -rf obj_*
+	rm -rf t/t_uvmgen_*
 	for p in submodules/* ; do \
 	   test -e $$p/Makefile && $(MAKE) -C $$p --no-print-directory clean ; \
 	done

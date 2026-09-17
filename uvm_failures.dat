@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+# DESCRIPTION: Verilator: List of UVM known-failing tests for nodist/uvmgen
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of either the GNU Lesser General Public License Version 3
+# or the Perl Artistic License Version 2.0.
+# SPDX-FileCopyrightText: 2026 Wilson Snyder
+# SPDX-License-Identifier: LGPL-3.0-only OR Artistic-2.0
+#
+######################################################################
+# Format of this file:
+#
+# t {test_name}  -- suppress the test by the given name
+#     (This is the syntax so that given an appropriate alias for `t`,
+#      the test may be run via cut-and-paste to the command line)
+#
+# Anything after # is a comment
+#
+######################################################################
+
+#==== RUNTIME to diagnose ====
+
+  t tests/70regs/80examples/05primer
+    # UVM_WARNING src/reg/uvm_reg.svh(1401) @ 0: reporter [RegModel] Register 'TABLES[0]' is unmapped in map 'model.default_map', %Error: cmdline_test.sv:67: Null pointer dereferenced
+    # See tests/examples/simple/registers/primer/sim.log
+    # Sub-test hw_reset passes, reg_user does not
+    # wsnyder branch uvm/primer
+
+#======================================================================
+#======================================================================
+#======================================================================
+
+#==== (#8335) Fix disable fork to fire event ====
+
+  t tests/35objections/91heartbeat/05negative/01illegal_event
+    # UVM_FATAL @ 180: uvm_test_top.env [HBFAIL] Did not recieve an update of myobj for component uvm_test_top.env.agent.mc1 since last event trigger at time 120 : last update time was 180
+    # Used to pass until 9588e67ca9a65fcd2ffb69d123233c8028286293 is the first bad commit
+    # V3Timing: pre-clear destructive event state before dynamic waits (#7340)
+    # however porting to uvm 2020 get error before and after this change so likely not relevant
+    # wsnyder branch bug8335_uvm_heartbeat
+  
+#==== (#8334) Fix process kill() to also kill children ====
+
+  t tests/40phasing/30processes/01multicomp
+    #..... **FAIL** *** UVM TEST FAILED : p_comp count = 21, expected 10 ***
+    # wsnyder branch bug8334_uvm_multicomp
+
+  t tests/40phasing/30processes/02persist_mode/02fj_persist
+    # **FAIL** UVM_ERROR test.sv(53) @ 70: uvm_test_top.sub_inst [Test] Previous phase was "pre_reset" instead of "post_reset".
+    # wsnyder branch bug8334_uvm_prev_phase
+
+  t tests/40phasing/10domains/04lockstep_jump
+    # **FAIL** UVM_ERROR test.sv(157) @ 600: uvm_test_top.l3 [MAIN] Expected Main start time of 750
+    # wsnyder branch uvm/lockstep
+
+  t tests/40phasing/50phase_controls/03jump
+    # missing PASS   src/base/uvm_phase.svh(1942) @ 108: reporter [JMPPHIDL] Attempting to jump from phase "main" which is not currently active (current state is UVM_PHASE_DORMANT). The jump will not happen until the phase becomes active.
+    # wsnyder branch uvm/jump
+
+  t tests/80examples/20codec
+    # FAIL tests/examples/integrated/codec/sim.log  UVM_FATAL tb_env.svh(247) @ 403554: env [TB/TIMEOUT] VIP and/or DUT failed to acquire syncs
+    # wsnyder branch uvm/codec
+
+  t tests/11tlm/20tlm2/30nonblocking/30passthru
+    # Timeout
+    # wsnyder branch uvm/passthru
+
+  t tests/11tlm/20tlm2/40nonblocking_uvm_time
+    # Timeout
+
+  t tests/70regs/30bkdr/30sparse
+    # **FAIL** (runtime error) tests/70regs/30bkdr/30sparse/sim.log   %Error: Alarm signal received, '--debug-runtime-timeout 10' exceeded;
+    # Prints UVM TEST PASSED first.
+    # Adding $finish to end of initial block makes it pass. Same issue.
+
+#==== (#8332) Fix process kill continuing the processx ====
+
+  t tests/20sequences/90Mantis/3129_seq_kill
+    #.... **FAIL** UVM_FATAL stop_started_seq_sv_side.sv(176) @ 1010: uvm_test_top.sequencer0@@root_seq.sps [KILLFAIL] Kill failed on short_packet_seq, i>51
+    # wsnyder branch uvm/kill_failed
+
+#==== (#7688) Fix data propagation through virtual interface with clocking ====
+
+  t tests/70regs/80examples/10oc_ethernet
+    # UVM_ERROR src/reg/uvm_reg.svh(2811) @ 210: reporter [RegModel] Register "model.MODER" value read from DUT (0x0000000000000000) does not match mirrored value (0x000000000000a000) (valid bit mask = 0x000000000001f7ff)
+
+  t tests/70regs/80examples/02integration/10direct_expl
+    # tests/examples/simple/registers/integration/10direct/sim.log UVM_ERROR src/reg/uvm_reg.svh(2811) @ 210: reporter [RegModel] Register "regmodel.ID" value read from DUT (0x0000000000000000) does not match mirrored value (0x0000000001765a03) (valid bit mask = 0x0000000003ffffff)
+  t tests/70regs/80examples/02integration/10direct_impl
+  t tests/70regs/80examples/02integration/20layered_expl
+  t tests/70regs/80examples/02integration/20layered_impl
+    # wsnyder branch bug7688_uvm_clocked_ifc
+
+  t tests/80examples/10ubus
+    # **FAIL** tests/examples/integrated/ubus/examples/sim.log   UVM_ERROR ubus_example_scoreboard.sv(80) @ 220: uvm_test_top.ubus_example_tb0.scoreboard0 [ubus_example_scoreboard] Read data mismatch.  Expected : 0.  Actual : a
+
+#==== (#7686) Fix std::process await not returning ====
+
+  t tests/04sync/02process_guard/01simple_kill
+    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect !0
+  t tests/04sync/02process_guard/02multiple_kill
+    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect 5
+  t tests/04sync/02process_guard/04grab
+    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect 10
+  t tests/04sync/02process_guard/05lock
+    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect !0
+  t tests/04sync/02process_guard/07test_end_cleanup_warn
+    # **FAIL** (explicit FAIL; UVM_ERRORs; missing PASS token)  # runs with `define EXPECT_SEQPRTZMB 1
+    # wsnyder branch uvm/simplekill bug7686_uvm_wait
+    # UVM2020.3.1 passes
+
+#==== (#7213) Fix code executing after $finish ====
+
+  t tests/01report/99compat/7448
+    # **FAIL** $finish called inside the function die(), but caller keep going
+
+  t tests/20sequences/07start_item_seq
+    # **FAIL** %Error: src/seq/uvm_sequencer_param_base.svh:325: Null pointer dereferenced
+    # - t/t_0.v:1029: Verilog $finish
+    # %Error: t/t_0.v:22585: Null pointer dereferenced
+    # The above is because the $finish doesn't stop executing the very next statement
+    # wsnyder branch bug7213_finish
+
+  t tests/70regs/30bkdr/01hdl
+    #  %Error: Alarm signal received, '--debug-runtime-timeout 10' exceeded
+
+#==== (#3645) X/Z support ====
+
+  t tests/03data/90Mantis/4621
+    # **FAIL** assert(y== "10xz10zx10xz10zx")
+
+######################################################################
+# Local Variables:
+# compile-command: "./uvm_results WPS.run_tests.log"
+# End:

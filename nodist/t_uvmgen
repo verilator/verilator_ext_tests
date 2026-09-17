@@ -1,0 +1,267 @@
+#!/usr/bin/env python3
+# -*- Python -*- See copyright, etc below
+######################################################################
+
+import argparse
+import math
+import os
+import re
+import subprocess
+import sys
+from pprint import pprint, pformat
+
+#######################################################################
+
+
+class Analysis:
+    Debug = 0
+
+    def __init__(self):
+        self.data = {}
+
+    def _new_test(self, testname):
+        if testname not in self.data:
+            self.data[testname] = {
+                'testname': testname,
+                'dir_exists': False,
+                'known_unstable': False,
+                'known_failure': False,
+                'skip': False,
+            }
+
+    def read_dirs_recurse(self, silent_prefix, path):
+        if os.path.isdir(path):
+            if os.path.exists(path + "/test.sv") or os.path.exists(path +
+                                                                   "/test.pl"):
+                testname = path.removeprefix(silent_prefix)
+                self._new_test(testname)
+                self.data[testname]['dir_exists'] = True
+                if os.path.exists(path + "/all.skip") or os.path.exists(path + "/verilator.skip"):
+                    self.data[testname]['skip'] = True
+
+            for basefile in os.listdir(path):
+                if basefile == "XXfail":
+                    continue
+                filename = os.path.join(path, basefile)
+                if ((basefile != ".") and (basefile != "..")
+                        and not os.path.islink(filename)):
+                    if (re.match(r'^[0-9][0-9]', basefile)):  # From run_tests
+                        self.read_dirs_recurse(silent_prefix, filename)
+
+    def read_golden(self, filename):
+        lineno = 0
+        with open(filename) as fh:
+            for line in fh:
+                lineno += 1
+                line = re.sub(r'#.*', '', line)
+                line = line.rstrip()
+                if re.match(r'^\s*$', line):
+                    continue
+                m = re.match(r'\s*(~?)\s*?t (\S+)\s*(.*)', line)
+                if m:
+                    known_unstable = m.group(1)
+                    testname = m.group(2)
+                    reason = m.group(3)
+                    self._new_test(testname)
+                    t = self.data[testname]
+                    if t['known_failure']:
+                        print("%s:%d: %%Warning: Duplicate lines for t %s" %
+                              (filename, lineno, testname))
+                    if known_unstable != "":
+                        t['known_unstable'] = True
+                    else:
+                        t['known_failure'] = True
+                else:
+                    print("%s:%d: %%Warning: Strange line: %s" %
+                          (filename, lineno, line))
+
+    def analyze(self):
+        ntests = 0.001  # Cheap divide-by-0 prevention
+        nskip = 0
+        npass = 0
+        print()
+        print("===================================")
+        # pprint(self.data)
+        for t in sorted(self.data.values(), key=lambda x: x['testname']):
+            if not t['dir_exists']:
+                sys.stdout.write("%%Error: no test directory: %s\n" %
+                                 (t['testname']))
+                continue
+
+            ntests += 1
+            if t['skip']:
+                nskip += 1
+                continue
+            if not t['known_failure']:
+                npass += 1
+
+        print()
+        print("== SUMMARY Tests=%0.0f  Fail=%d  Skip=%d  Pass/Skip=%d (%4.1f%%)" %
+              (ntests, (ntests - npass - nskip), nskip, (npass + nskip),
+               ((npass + nskip) * 100.0 / ntests)))
+        print()
+
+    def done(self, directory):
+        print("===================================")
+        branch = self.run_capture("(cd " + directory +
+                                  " && git branch --show-current 2>&1)")
+        branch = branch.rstrip()
+        print("    Branch = %s" % branch)
+        for m in re.finditer(r'pr([0-9]+)', branch):
+            print("    gh issue edit %s --add-label 'pr: uvm-pass'" %
+                  m.group(1))
+        print("")
+
+        self.run("(cd " + directory + " && git status 2>&1)")
+        self.run(
+            "(cd " + directory +
+            " && git log --pretty=format:'%h%d  [%an]  %s'  master...HEAD 2>&1)"
+        )
+
+    def run(self, command):
+        print("- %s" % command)
+        proc = subprocess.Popen(command,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                shell=True)
+        stdout, stderr = proc.communicate()
+        if proc.returncode != 0:
+            print("-  command failed: %s" % (stderr.strip()))
+
+        tabbed_text = '\n'.join('    ' + line
+                                for line in stderr.decode().splitlines())
+        tabbed_text += '\n'.join('    ' + line
+                                 for line in stdout.decode().splitlines())
+        print(tabbed_text)
+
+    def run_capture(self, command, check=True):
+        """Run a command and return results"""
+        proc = subprocess.run([command],
+                              capture_output=True,
+                              text=True,
+                              shell=True,
+                              check=False)
+        if check and proc.returncode:
+            sys.exit("%Error: command failed '" + command + "':\n" +
+                     proc.stderr + proc.stdout)
+        return str(proc.stdout)
+
+    def check_links(self):
+        path = "uvm-core"
+        if not os.path.exists(path) or not os.readlink(path):
+            sys.exit(
+                "%Error: Create a '" + path +
+                "' symlink to the 'git@github.com:OSCI-WG/uvm-core.git' checkout"
+            )
+        path = "uvm-tests"
+        if not os.path.exists(path) or not os.readlink(path):
+            sys.exit(
+                "%Error: Create a '" + path +
+                "' symlink to the 'git@github.com:OSCI-WG/uvm-tests.git' checkout"
+            )
+
+    def remove_old_gen_tests(self):
+        path = "t"
+        for basefile in os.listdir(path):
+            if not re.match(r'^t_uvmgen_', basefile):
+                continue
+            filename = os.path.join(path, basefile)
+            os.unlink(filename)
+
+    def gen_tests(self):
+        path = "t"
+        for t in sorted(self.data.values(), key=lambda x: x['testname']):
+            if t['skip']:
+                continue
+            bad = t['known_failure']
+            testbase = t['testname']
+            testbase = re.sub(r'tests/', '', testbase)
+            testbase = re.sub(r'[^a-zA-Z0-9]', '_', testbase)
+            testbase = testbase + ("_bad" if bad else "")
+            filename = os.path.join(path, "t_uvmgen_" + testbase + ".py")
+
+            with open(filename, "w") as fh:
+                self._gen_tests_write(t, fh, bad)
+
+            os.chmod(filename, 0o777)
+
+    def _gen_tests_write(self, t, fh, bad):
+        fh.write("#!/usr/bin/env python3\n")
+        fh.write(
+            "# DESCR" +
+            "IPTION: Verilator: Verilog Test driver generated by t_uvmgen\n")
+        fh.write("\n")
+        fh.write("import vltest_bootstrap\n")
+        fh.write("\n")
+        fh.write("test.scenarios('vlt')\n")
+        fh.write("test.clean_command = ('cd uvm-tests && admin/bin/run_tests " +
+                 t['testname'] + "')\n")
+        fh.write("\n")
+        fh.write("test.setenv('VERILATOR', " +
+                 "os.environ['VERILATOR_ROOT'] + '/bin/verilator')\n")
+        fh.write(
+            "test.setenv('VERILATOR_TEST_FLAGS', " +
+            "'-CFLAGS -O0 --quiet-build --debug-runtime-timeout 20 --dump-inputs ' + test.build_jobs_groups)\n"
+        )
+        fh.write("test.setenv('OBJCACHE', 'nice ccache')\n")
+        # run_tests does an abspath on the -u argument
+        fh.write("test.run(cmd=['ulimit -m 16000000',\n")
+        fh.write("              ' && ulimit -d 16000000',\n")
+        fh.write("              ' && ulimit -v 16000000',\n")
+        fh.write("              ' && cd uvm-tests',\n")
+        fh.write(
+            "              ' && admin/bin/run_tests -u ../uvm-core verilator -v ',\n"
+        )
+        fh.write("              ' " + t['testname'] + "'],\n")
+        fh.write("         logfile=test.run_log_filename,\n")
+        if bad:
+            fh.write("         fails=True,\n")
+        fh.write("         )\n")
+        fh.write("\n")
+
+        # Make sure that even the _bad tests compile ok (all currently fail at runtime)
+        if bad:
+            fh.write(
+                "test.file_grep(test.run_log_filename, r'(V e r i l a t i o n   R e p o r t|SKIP \\(verilator only)')\n"
+            )
+            fh.write("\n")
+
+        fh.write("test.passes()\n")
+
+
+#######################################################################
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        allow_abbrev=False,
+        prog="t_uvmgen",
+        description="Generate t/t_uvmgen_..... tests from uvm_failures.dat",
+        epilog=
+        """ Copyright 2026-2026 by Wilson Snyder.  This package is free software;
+you can redistribute it and/or modify it under the terms of either the GNU
+Lesser General Public License Version 3 or the Perl Artistic License
+Version 2.0.  """)
+    parser.add_argument('--debug',
+                        action='store_const',
+                        const=9,
+                        help='enable debug')
+    parser.add_argument('--done',
+                        action='store',
+                        help='completion message (pass which directory)')
+    Args = parser.parse_args()
+
+    o = Analysis()
+    o.Debug = Args.debug
+    o.check_links()
+    o.read_dirs_recurse("uvm-tests/", "uvm-tests/tests")
+    o.read_golden("uvm_failures.dat")
+    o.analyze()
+    o.remove_old_gen_tests()
+    o.gen_tests()
+    if Args.done:
+        o.done(Args.done)
+
+######################################################################
+# Local Variables:
+# compile-command: "cd .. ; nodist/t_uvmgen"
+# End:

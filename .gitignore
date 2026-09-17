@@ -3,3 +3,6 @@ obj_*
 .gdb_history
 *private*
 t/__pycache__
+t/t_uvmgen_*
+uvm-core
+uvm-tests
