@@ -95,28 +95,10 @@ class Analysis:
             if not t['known_failure']:
                 npass += 1
 
-        print()
         print("== SUMMARY Tests=%0.0f  Fail=%d  Skip=%d  Pass/Skip=%d (%4.1f%%)" %
               (ntests, (ntests - npass - nskip), nskip, (npass + nskip),
                ((npass + nskip) * 100.0 / ntests)))
         print()
-
-    def done(self, directory):
-        print("===================================")
-        branch = self.run_capture("(cd " + directory +
-                                  " && git branch --show-current 2>&1)")
-        branch = branch.rstrip()
-        print("    Branch = %s" % branch)
-        for m in re.finditer(r'pr([0-9]+)', branch):
-            print("    gh issue edit %s --add-label 'pr: uvm-pass'" %
-                  m.group(1))
-        print("")
-
-        self.run("(cd " + directory + " && git status 2>&1)")
-        self.run(
-            "(cd " + directory +
-            " && git log --pretty=format:'%h%d  [%an]  %s'  master...HEAD 2>&1)"
-        )
 
     def run(self, command):
         print("- %s" % command)
@@ -194,7 +176,7 @@ class Analysis:
         fh.write("import vltest_bootstrap\n")
         fh.write("\n")
         fh.write("test.scenarios('vlt')\n")
-        fh.write("test.clean_command = ('cd uvm-tests && admin/bin/run_tests " +
+        fh.write("test.clean_command = ('cd uvm-tests && admin/bin/run_tests -c " +
                  t['testname'] + "')\n")
         fh.write("\n")
         fh.write("test.setenv('VERILATOR', " +
@@ -245,9 +227,6 @@ Version 2.0.  """)
                         action='store_const',
                         const=9,
                         help='enable debug')
-    parser.add_argument('--done',
-                        action='store',
-                        help='completion message (pass which directory)')
     Args = parser.parse_args()
 
     o = Analysis()
@@ -258,8 +237,6 @@ Version 2.0.  """)
     o.analyze()
     o.remove_old_gen_tests()
     o.gen_tests()
-    if Args.done:
-        o.done(Args.done)
 
 ######################################################################
 # Local Variables:
