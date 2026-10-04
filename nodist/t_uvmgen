@@ -12,6 +12,8 @@ from pprint import pprint, pformat
 
 #######################################################################
 
+Run_Tests_Flags = {}
+
 
 class Analysis:
     Debug = 0
@@ -36,7 +38,8 @@ class Analysis:
                 testname = path.removeprefix(silent_prefix)
                 self._new_test(testname)
                 self.data[testname]['dir_exists'] = True
-                if os.path.exists(path + "/all.skip") or os.path.exists(path + "/verilator.skip"):
+                if os.path.exists(path + "/all.skip") or os.path.exists(
+                        path + "/verilator.skip"):
                     self.data[testname]['skip'] = True
 
             for basefile in os.listdir(path):
@@ -95,10 +98,32 @@ class Analysis:
             if not t['known_failure']:
                 npass += 1
 
-        print("== SUMMARY Tests=%0.0f  Fail=%d  Skip=%d  Pass/Skip=%d (%4.1f%%)" %
-              (ntests, (ntests - npass - nskip), nskip, (npass + nskip),
+        print(
+            "== SUMMARY Tests=%0.0f  Fail=%d  Skip=%d  Pass/Skip=%d (%4.1f%%)"
+            % (ntests, (ntests - npass - nskip), nskip, (npass + nskip),
                ((npass + nskip) * 100.0 / ntests)))
         print()
+
+    def clear_dups(self):
+        # Running tests/00basic/20subgroup will run all of the tests under it also
+        # t_uvmgen_00basic_20subgroup.py   -- tests/00basic/20subgroup
+        # t_uvmgen_00basic_20subgroup_10subsub.py   -- tests/00basic/20subgroup/10subsub
+        # t_uvmgen_00basic_20subgroup_10subsub_10subsubsub.py   -- tests/00basic/20subgroup/10subsub/10subsubsub
+        # t_uvmgen_00basic_20subgroup_20subsub_10subsubsub.py   -- tests/00basic/20subgroup/20subsub/10subsubsub
+        dups = []
+        for t in sorted(self.data.values(), key=lambda x: x['testname']):
+            dir = t['testname']
+            while True:
+                dir = os.path.dirname(dir)
+                if dir == "":
+                    break
+                if dir in self.data:
+                    dups.append(t['testname'])
+                    break
+
+        for dup in dups:
+            del self.data[dup]
+
 
     def run(self, command):
         print("- %s" % command)
@@ -152,6 +177,15 @@ class Analysis:
 
     def gen_tests(self):
         path = "t"
+        # These tests disrupt each other, so we separate them in priority
+        # 't_uvmgen_00basic_20subgroup.py'
+        # 't_uvmgen_00basic_20subgroup_10subsub.py'
+        # 't_uvmgen_00basic_20subgroup_10subsub_10subsubsub.py'
+        # 't_uvmgen_00basic_20subgroup_20subsub_10subsubsub.py'
+        # Also round-robining puts similar tests further apart, which helps
+        # parallelism ccache hits (as similar one was built long ago, versus building now)
+        priority_group = 0
+
         for t in sorted(self.data.values(), key=lambda x: x['testname']):
             if t['skip']:
                 continue
@@ -160,14 +194,16 @@ class Analysis:
             testbase = re.sub(r'tests/', '', testbase)
             testbase = re.sub(r'[^a-zA-Z0-9]', '_', testbase)
             testbase = testbase + ("__unsup" if unsup else "")
-            filename = os.path.join(path, "t_uvmgen_" + testbase + ".py")
+            t['pyname'] = "t_uvmgen_" + testbase + ".py"
+            filename = os.path.join(path, t['pyname'])
 
             with open(filename, "w") as fh:
-                self._gen_tests_write(t, fh, unsup)
+                self._gen_tests_write(t, fh, unsup, priority_group + 1)
+                priority_group = (priority_group + 1) % 5
 
             os.chmod(filename, 0o777)
 
-    def _gen_tests_write(self, t, fh, unsup):
+    def _gen_tests_write(self, t, fh, unsup, priority):
         fh.write("#!/usr/bin/env python3\n")
         fh.write(
             "# DESCR" +
@@ -175,9 +211,11 @@ class Analysis:
         fh.write("\n")
         fh.write("import vltest_bootstrap\n")
         fh.write("\n")
+        fh.write("test.priority(%d)\n" % priority)
         fh.write("test.scenarios('vlt')\n")
-        fh.write("test.clean_command = ('cd uvm-tests && admin/bin/run_tests -c " +
-                 t['testname'] + "')\n")
+        fh.write(
+            "test.clean_command = ('cd uvm-tests && admin/bin/run_tests -c " +
+            t['testname'] + "')\n")
         fh.write("\n")
         fh.write("test.setenv('VERILATOR', " +
                  "os.environ['VERILATOR_ROOT'] + '/bin/verilator')\n")
@@ -191,9 +229,12 @@ class Analysis:
         fh.write("              ' && ulimit -d 16000000',\n")
         fh.write("              ' && ulimit -v 16000000',\n")
         fh.write("              ' && cd uvm-tests',\n")
+        fl = ''
+        if t['pyname'] in Run_Tests_Flags:
+            fl += ' ' + Run_Tests_Flags[t['pyname']]
         fh.write(
-            "              ' && admin/bin/run_tests -u ../uvm-core verilator -v ',\n"
-        )
+            "              ' && admin/bin/run_tests -u ../uvm-core verilator -v "
+            + fl + "',\n")
         fh.write("              ' " + t['testname'] + "'],\n")
         fh.write("         logfile=test.run_log_filename,\n")
         if unsup:
@@ -235,6 +276,7 @@ Version 2.0.  """)
     o.read_dirs_recurse("uvm-tests/", "uvm-tests/tests")
     o.read_golden("uvm_failures.dat")
     o.analyze()
+    o.clear_dups()
     o.remove_old_gen_tests()
     o.gen_tests()
 
