@@ -41,33 +41,6 @@
   
 #==== (#8334) Fix process kill() to also kill children ====
 
-  t tests/40phasing/30processes/01multicomp
-    #..... **FAIL** *** UVM TEST FAILED : p_comp count = 21, expected 10 ***
-    # wsnyder branch bug8334_uvm_multicomp
-
-  t tests/40phasing/30processes/02persist_mode/02fj_persist
-    # **FAIL** UVM_ERROR test.sv(53) @ 70: uvm_test_top.sub_inst [Test] Previous phase was "pre_reset" instead of "post_reset".
-    # wsnyder branch bug8334_uvm_prev_phase
-
-  t tests/40phasing/10domains/04lockstep_jump
-    # **FAIL** UVM_ERROR test.sv(157) @ 600: uvm_test_top.l3 [MAIN] Expected Main start time of 750
-    # wsnyder branch uvm/lockstep
-
-  t tests/40phasing/50phase_controls/03jump
-    # missing PASS   src/base/uvm_phase.svh(1942) @ 108: reporter [JMPPHIDL] Attempting to jump from phase "main" which is not currently active (current state is UVM_PHASE_DORMANT). The jump will not happen until the phase becomes active.
-    # wsnyder branch uvm/jump
-
-  t tests/80examples/20codec
-    # FAIL tests/examples/integrated/codec/sim.log  UVM_FATAL tb_env.svh(247) @ 403554: env [TB/TIMEOUT] VIP and/or DUT failed to acquire syncs
-    # wsnyder branch uvm/codec
-
-  t tests/11tlm/20tlm2/30nonblocking/30passthru
-    # Timeout
-    # wsnyder branch uvm/passthru
-
-  t tests/11tlm/20tlm2/40nonblocking_uvm_time
-    # Timeout
-
   t tests/70regs/30bkdr/30sparse
     # **FAIL** (runtime error) tests/70regs/30bkdr/30sparse/sim.log   %Error: Alarm signal received, '--debug-runtime-timeout 10' exceeded;
     # Prints UVM TEST PASSED first.
@@ -93,21 +66,6 @@
 
   t tests/80examples/10ubus
     # **FAIL** tests/examples/integrated/ubus/examples/sim.log   UVM_ERROR ubus_example_scoreboard.sv(80) @ 220: uvm_test_top.ubus_example_tb0.scoreboard0 [ubus_example_scoreboard] Read data mismatch.  Expected : 0.  Actual : a
-
-#==== (#7686) Fix std::process await not returning ====
-
-  t tests/04sync/02process_guard/01simple_kill
-    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect !0
-  t tests/04sync/02process_guard/02multiple_kill
-    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect 5
-  t tests/04sync/02process_guard/04grab
-    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect 10
-  t tests/04sync/02process_guard/05lock
-    # **FAIL** !! UVM TEST FAILED !! cb_catch_counter::SEQPRTZMB_msg count is 0 expect !0
-  t tests/04sync/02process_guard/07test_end_cleanup_warn
-    # **FAIL** (explicit FAIL; UVM_ERRORs; missing PASS token)  # runs with `define EXPECT_SEQPRTZMB 1
-    # wsnyder branch uvm/simplekill bug7686_uvm_wait
-    # UVM2020.3.1 passes
 
 #==== (#7213) Fix code executing after $finish ====
 
