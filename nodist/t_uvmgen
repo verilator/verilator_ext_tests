@@ -12,7 +12,10 @@ from pprint import pprint, pformat
 
 #######################################################################
 
-Run_Tests_Flags = {}
+Tests_Verilator_Flags = {
+    'tests/99compat/7520_compat_packer': '-CFLAGS -Wno-overloaded-virtual',
+}
+Tests_Run_Flags = {}
 
 
 class Analysis:
@@ -124,7 +127,6 @@ class Analysis:
         for dup in dups:
             del self.data[dup]
 
-
     def run(self, command):
         print("- %s" % command)
         proc = subprocess.Popen(command,
@@ -219,10 +221,13 @@ class Analysis:
         fh.write("\n")
         fh.write("test.setenv('VERILATOR', " +
                  "os.environ['VERILATOR_ROOT'] + '/bin/verilator')\n")
+        fl = ''
+        if t['testname'] in Tests_Verilator_Flags:
+            fl += ' ' + Tests_Verilator_Flags[t['testname']]
         fh.write(
             "test.setenv('VERILATOR_TEST_FLAGS', " +
-            "'-CFLAGS -O0 --quiet-build --debug-runtime-timeout 20 --dump-inputs ' + test.build_jobs_groups)\n"
-        )
+            "'-CFLAGS -O0 --quiet-build --debug-runtime-timeout 20 --dump-inputs"
+            + fl + " ' + test.build_jobs_groups)\n")
         fh.write("test.setenv('OBJCACHE', 'nice ccache')\n")
         # run_tests does an abspath on the -u argument
         fh.write("test.run(cmd=['ulimit -m 16000000',\n")
@@ -230,8 +235,8 @@ class Analysis:
         fh.write("              ' && ulimit -v 16000000',\n")
         fh.write("              ' && cd uvm-tests',\n")
         fl = ''
-        if t['pyname'] in Run_Tests_Flags:
-            fl += ' ' + Run_Tests_Flags[t['pyname']]
+        if t['testname'] in Tests_Run_Flags:
+            fl += ' ' + Tests_Run_Flags[t['testname']]
         fh.write(
             "              ' && admin/bin/run_tests -u ../uvm-core verilator -v "
             + fl + "',\n")
