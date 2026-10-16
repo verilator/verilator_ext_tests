@@ -18,18 +18,6 @@
 #
 ######################################################################
 
-#==== RUNTIME to diagnose ====
-
-  t tests/70regs/80examples/05primer
-    # UVM_WARNING src/reg/uvm_reg.svh(1401) @ 0: reporter [RegModel] Register 'TABLES[0]' is unmapped in map 'model.default_map', %Error: cmdline_test.sv:67: Null pointer dereferenced
-    # See tests/examples/simple/registers/primer/sim.log
-    # Sub-test hw_reset passes, reg_user does not
-    # wsnyder branch uvm/primer
-
-#======================================================================
-#======================================================================
-#======================================================================
-
 #==== (#8335) Fix disable fork to fire event ====
 
   t tests/35objections/91heartbeat/05negative/01illegal_event

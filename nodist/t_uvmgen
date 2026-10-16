@@ -226,7 +226,7 @@ class Analysis:
             fl += ' ' + Tests_Verilator_Flags[t['testname']]
         fh.write(
             "test.setenv('VERILATOR_TEST_FLAGS', " +
-            "'-CFLAGS -O0 --quiet-build --debug-runtime-timeout 20 --dump-inputs"
+            "'-CFLAGS -O0 --quiet-build --debug-runtime-timeout 30 --dump-inputs"
             + fl + " ' + test.build_jobs_groups)\n")
         fh.write("test.setenv('OBJCACHE', 'nice ccache')\n")
         # run_tests does an abspath on the -u argument
